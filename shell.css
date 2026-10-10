@@ -124,6 +124,9 @@ button.avatar {
   flex-direction: column;
   width: var(--navigation-width);
   height: calc(100vh - var(--topbar-height));
+  /* The sidebar and the header share a colour; the line on top keeps the header's edge, as the
+     line under the drawer's header does. */
+  border-top: 1px solid var(--header-border);
   border-right: 1px solid var(--header-border);
   background: var(--header);
   color: var(--header-text);

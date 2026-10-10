@@ -48,7 +48,7 @@ import '@mado/design-system/code.css';
 ### 画面の枠のclassと属性
 
 - `.app-shell[data-navigation]`: サイドバーの形。`sidebar`（名前とアイコン）、`rail`（アイコンだけ）、`drawer`（上部バーのメニューボタンから開く）のどれかをアプリが入れます。`sidebar`のときは`.brand`（アプリ名）がサイドバーと同じ幅になります。
-- `.navigation-sidebar`と`.navigation-drawer`は、ライト・ダークのどちらのテーマでも上部バーと同じ暗い色（`--header`で始まる変数）で描きます。上部バーとナビゲーションをひと続きの枠にして、画面の中身と分けるためです。選択中の項目と、フォーカスの印には`--header-indicator`を使います。
+- `.navigation-sidebar`と`.navigation-drawer`は、ライト・ダークのどちらのテーマでも上部バーと同じ暗い色（`--header`で始まる変数）で描きます。上部バーとナビゲーションをひと続きの枠にして、画面の中身と分けるためです。サイドバーの上端には、上部バーとの境目の線（`--header-border`）を引きます。選択中の項目と、フォーカスの印には`--header-indicator`を使います。
 - `.navigation-sidebar[data-collapsed='true']`: アイコンだけの列にします。名前は`.navigation-label`に入れて読み上げ用に残し、`title`でツールチップにします。
 - `.navigation-resize-handle`: サイドバーの右の境目。幅はアプリが`.app-shell`に`--navigation-width`を書いて変えます。ドラッグ中は`data-dragging='true'`を付けます。
 - 切り替える幅は両アプリで同じにします。1200px以上は`sidebar`（手で`rail`に畳める）、900px以上1200px未満は`rail`、900px未満は`drawer`です。
