@@ -91,16 +91,11 @@ pull requestとmainへのpushで、GitHub Actions（`.github/workflows/ci.yml`�
 
 ## 版を上げて配る
 
-1. `package.json`の`version`を上げ、`CHANGELOG.md`にその版の節（例: `## 0.5.0`）を足して、mainへ入れます。
-2. その版のタグ（例: `v0.5.0`）をmainのcommitに付けてpushします。
+1. `package.json`の`version`を上げ、`CHANGELOG.md`にその版の節（例: `## 0.5.0`）を足します。
+2. mainへ入れます。GitHub Actions（`.github/workflows/release.yml`）が、その版のGitHub Releaseがまだ無ければ、テストと`npm pack`を行い、タグ（例: `v0.5.0`）とtarballを添付したReleaseを作ります。`CHANGELOG.md`にその版の節が無いと止まります。版を上げないcommitでは何もしません。
+3. 各アプリの依存のURLを新しい版に替えて`npm install`します（Mado: `front/`、Mado Model Tracking: `apps/web`）。
 
-   ```sh
-   git tag v0.5.0
-   git push origin v0.5.0
-   ```
-
-3. GitHub Actions（`.github/workflows/release.yml`）がテストと`npm pack`を行い、tarballを添付したGitHub Releaseを作ります。タグと`package.json`の版が違う、または`CHANGELOG.md`にその版の節が無いと止まります。
-4. 各アプリの依存のURLを新しい版に替えて`npm install`します（Mado: `front/`、Mado Model Tracking: `apps/web`）。
+Releaseの作成に失敗したときは、直したcommitをmainへ入れるか、ActionsのRelease workflowを手で実行（Run workflow）し直します。
 
 一度公開した版のtarballは差し替えません。差し替えると、各アプリのlockfileの`integrity`と合わなくなります。直すときは版を上げます。
 

@@ -1,65 +1,90 @@
-# A tag v<version> (the version in package.json) packs the package and attaches the tarball to a
-# GitHub Release; the apps depend on that tarball's URL. The job that runs npm keeps a read-only
-# token, and only the job that creates the release, without running npm, may write.
+# Publishes the version in package.json. When main gets a version that has no GitHub Release yet,
+# the tests run, npm pack makes the tarball, and the release v<version> (and its tag) is created
+# with the tarball attached; the apps depend on that tarball's URL. The job that runs npm keeps a
+# read-only token, and only the job that creates the release, without running npm, may write.
 name: Release
 
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
-  pack:
-    name: Test and pack
+  check:
+    name: Check for a new version
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     outputs:
       version: ${{ steps.version.outputs.version }}
+      released: ${{ steps.release.outputs.released }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Read the version
+        id: version
+        run: echo "version=$(node -p 'require("./package.json").version')" >> "$GITHUB_OUTPUT"
+      - name: Look for its release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if gh release view "v$VERSION" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "v$VERSION is already released."
+            echo "released=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "released=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  pack:
+    name: Test and pack
+    needs: check
+    if: needs.check.outputs.released == 'false'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      VERSION: ${{ needs.check.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
-      - name: Check that the tag is the package version
-        id: version
-        run: |
-          version="$(node -p 'require("./package.json").version')"
-          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
-            echo "::error::The tag $GITHUB_REF_NAME is not v$version, the version in package.json."
-            exit 1
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
       - name: Check that CHANGELOG.md has the version
-        run: node scripts/release-notes.mjs "${{ steps.version.outputs.version }}" > /dev/null
+        run: node scripts/release-notes.mjs "$VERSION" > /dev/null
       - run: npm ci
       - run: npm test
       - run: npm pack
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: package
-          path: mado-design-system-${{ steps.version.outputs.version }}.tgz
+          path: mado-design-system-${{ needs.check.outputs.version }}.tgz
           if-no-files-found: error
 
   release:
     name: Create the release
-    needs: pack
+    needs: [check, pack]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       contents: write
+    env:
+      VERSION: ${{ needs.check.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: package
-      - name: Create the release with the tarball
+      - name: Create the release and its tag with the tarball
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ needs.pack.outputs.version }}
         run: |
           node scripts/release-notes.mjs "$VERSION" > release-notes.md
-          gh release create "$GITHUB_REF_NAME" "mado-design-system-$VERSION.tgz" \
-            --verify-tag --title "$GITHUB_REF_NAME" --notes-file release-notes.md
+          gh release create "v$VERSION" "mado-design-system-$VERSION.tgz" \
+            --target "$GITHUB_SHA" --title "v$VERSION" --notes-file release-notes.md
