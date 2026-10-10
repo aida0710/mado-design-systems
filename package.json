@@ -1,0 +1,58 @@
+{
+  "name": "@mado/design-system",
+  "version": "0.4.0",
+  "private": true,
+  "description": "MadoとMado Model Trackingが共有するデザインシステム。色・書体・角丸の変数、要素の既定、部品、画面の枠、テキストの色付けとIBM Plexの書体ファイル",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aida0710/mado-design-systems.git"
+  },
+  "homepage": "https://github.com/aida0710/mado-design-systems#readme",
+  "bugs": "https://github.com/aida0710/mado-design-systems/issues",
+  "type": "module",
+  "files": [
+    "tokens.css",
+    "fonts.css",
+    "base.css",
+    "components.css",
+    "shell.css",
+    "code.css",
+    "code.js",
+    "code.d.ts",
+    "fonts",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    "./tokens.css": "./tokens.css",
+    "./fonts.css": "./fonts.css",
+    "./base.css": "./base.css",
+    "./components.css": "./components.css",
+    "./shell.css": "./shell.css",
+    "./code.css": "./code.css",
+    "./code": {
+      "types": "./code.d.ts",
+      "default": "./code.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "*.css",
+    "./code.js"
+  ],
+  "scripts": {
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "highlight.js": "^11.11.0"
+  },
+  "peerDependenciesMeta": {
+    "highlight.js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "highlight.js": "^11.12.0",
+    "vitest": "^4.1.5"
+  }
+}
