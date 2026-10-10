@@ -63,7 +63,7 @@ const pairs = [
     '--code-meta',
   ].map((text) => [text, '--code-background', 4.5]),
   ...['--accent', '--input-border'].flatMap((mark) => ['--background', '--surface'].map((surface) => [mark, surface, 3])),
-  ['--header-indicator', '--header', 3],
+  ...['--header', '--header-hover', '--header-active'].map((surface) => ['--header-indicator', surface, 3]),
 ];
 
 describe('contrast', () => {

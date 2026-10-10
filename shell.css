@@ -106,6 +106,8 @@ button.avatar {
 }
 
 /* ── Below the header: the navigation sidebar, then the screen ────────── */
+/* The sidebar and the drawer take the header's colours in both themes, so the header and the
+   navigation read as one dark frame around the screen. The links below are drawn for that frame. */
 .app-body {
   display: flex;
   align-items: flex-start;
@@ -122,8 +124,9 @@ button.avatar {
   flex-direction: column;
   width: var(--navigation-width);
   height: calc(100vh - var(--topbar-height));
-  border-right: 1px solid var(--border);
-  background: var(--background);
+  border-right: 1px solid var(--header-border);
+  background: var(--header);
+  color: var(--header-text);
 }
 .navigation-sidebar[data-collapsed='true'] {
   width: var(--navigation-rail-width);
@@ -145,7 +148,7 @@ button.avatar {
 }
 .navigation-group-label {
   padding: 14px 16px 4px;
-  color: var(--muted);
+  color: var(--header-text-muted);
   font-size: 11px;
   white-space: nowrap;
   overflow: hidden;
@@ -158,32 +161,38 @@ button.avatar {
   min-height: 34px;
   padding: 0 16px 0 13px;
   border-left: 3px solid transparent;
-  color: var(--text);
+  color: var(--header-text-muted);
   white-space: nowrap;
 }
 .navigation-link > svg {
   flex: 0 0 auto;
   width: 18px;
   height: 18px;
-  color: var(--muted);
+  color: inherit;
 }
 .navigation-label {
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .navigation-link:hover {
-  background: var(--surface-hover);
+  background: var(--header-hover);
   text-decoration: none;
 }
 .navigation-link.active,
 .navigation-link[aria-current='page'] {
-  background: var(--selected);
-  border-left-color: var(--accent);
+  background: var(--header-active);
+  border-left-color: var(--header-indicator);
+  color: var(--header-text-strong);
   font-weight: 600;
 }
 .navigation-link.active > svg,
 .navigation-link[aria-current='page'] > svg {
-  color: var(--accent);
+  color: var(--header-indicator);
+}
+/* The brand teal of the light theme is too dark on the frame; the focus mark uses the header's. */
+.navigation-sidebar :focus-visible,
+.navigation-drawer :focus-visible {
+  outline-color: var(--header-indicator);
 }
 /* The rail keeps the icons; the names stay readable to screen readers and show as tooltips. */
 .navigation-sidebar[data-collapsed='true'] .navigation-group-label {
@@ -192,7 +201,7 @@ button.avatar {
 .navigation-sidebar[data-collapsed='true'] .navigation-group + .navigation-group {
   margin-top: 6px;
   padding-top: 6px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--header-border);
 }
 .navigation-sidebar[data-collapsed='true'] nav {
   padding-top: 6px;
@@ -215,7 +224,10 @@ button.avatar {
   display: flex;
   justify-content: flex-end;
   padding: 6px 8px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--header-border);
+}
+.navigation-sidebar-footer .icon-button:hover:not(:disabled) {
+  background: var(--header-control-hover);
 }
 .navigation-sidebar[data-collapsed='true'] .navigation-sidebar-footer {
   justify-content: center;
@@ -242,7 +254,7 @@ button.avatar {
 .navigation-resize-handle:hover::after,
 .navigation-resize-handle:focus-visible::after,
 .navigation-resize-handle[data-dragging='true']::after {
-  background: var(--accent);
+  background: var(--header-indicator);
 }
 .navigation-resize-handle:focus-visible {
   outline: none;
@@ -304,28 +316,10 @@ button.avatar {
 }
 .navigation-drawer .navigation-group-label {
   padding: 14px 18px 4px;
-  color: var(--header-text-muted);
 }
 .navigation-drawer .navigation-link {
   min-height: 44px;
   padding: 0 18px 0 15px;
-  color: var(--header-text-muted);
-}
-.navigation-drawer .navigation-link > svg {
-  color: inherit;
-}
-.navigation-drawer .navigation-link.active,
-.navigation-drawer .navigation-link[aria-current='page'] {
-  background: var(--header-active);
-  border-left-color: var(--header-indicator);
-  color: var(--header-text-strong);
-}
-.navigation-drawer .navigation-link.active > svg,
-.navigation-drawer .navigation-link[aria-current='page'] > svg {
-  color: var(--header-indicator);
-}
-.navigation-drawer .navigation-link:hover {
-  background: var(--header-hover);
 }
 
 /* ── Login ───────────────────────────────────────────────────────────── */

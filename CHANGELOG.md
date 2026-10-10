@@ -1,5 +1,10 @@
 # 変更履歴
 
+## 0.5.0
+
+- サイドバー（`.navigation-sidebar`）を、ライトテーマでも上部バーと同じ暗い色にしました。スマホのドロワー（`.navigation-drawer`）は前から暗い色で、サイドバーとドロワーの項目の色の指定を1つにまとめました。選択中の項目の線とアイコン、幅を変える境目、フォーカスの印は`--header-indicator`です。
+- 読み込む側の変更は要りません。サイドバーの中に自前の色を指定している場合は、暗い地で読めるか確かめてください。
+
 ## 0.4.0
 
 - 名前を`@mado/design-tokens`から`@mado/design-system`に変え、Mado Model Trackingの`packages/design-tokens`からこのリポジトリへ移しました。CSSと`code.js`の中身は0.3.0と同じです。読み込む側は`@mado/design-tokens/…`を`@mado/design-system/…`に書き換えます。
