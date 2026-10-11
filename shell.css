@@ -346,6 +346,16 @@ button.avatar {
   font-weight: 600;
   line-height: 1;
 }
+/* An 8px gap keeps the brand and a full touch target together on a 320px screen. */
+.login-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.login-header > :last-child {
+  flex: none;
+}
 .login-eyebrow {
   margin: 20px 0 6px;
   color: var(--muted);
