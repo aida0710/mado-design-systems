@@ -47,6 +47,7 @@ import '@mado/design-system/code.css';
 
 ### 画面の枠のclassと属性
 
+- `.login-mark.login-header`: ログインカードの上段で、ロゴと表示言語の選択を左右に並べます。ログイン画面と初回パスワード変更画面で同じ配置にします。
 - `.app-shell[data-navigation]`: サイドバーの形。`sidebar`（名前とアイコン）、`rail`（アイコンだけ）、`drawer`（上部バーのメニューボタンから開く）のどれかをアプリが入れます。`sidebar`のときは`.brand`（アプリ名）がサイドバーと同じ幅になります。
 - `.navigation-sidebar`と`.navigation-drawer`は、ライト・ダークのどちらのテーマでも上部バーと同じ暗い色（`--header`で始まる変数）で描きます。上部バーとナビゲーションをひと続きの枠にして、画面の中身と分けるためです。サイドバーの上端には、上部バーとの境目の線（`--header-border`）を引きます。選択中の項目と、フォーカスの印には`--header-indicator`を使います。
 - `.navigation-sidebar[data-collapsed='true']`: アイコンだけの列にします。名前は`.navigation-label`に入れて読み上げ用に残し、`title`でツールチップにします。
