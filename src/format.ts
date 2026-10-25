@@ -1,14 +1,14 @@
 /*
- * Sizes and elapsed times as people read them. The caller passes the Intl locale of the display
- * language, such as 'ja-JP'.
+ * サイズと経過時間を、人が読む形にする。呼び出し側は表示言語のIntlのロケール（'ja-JP'など）を
+ * 渡す。
  */
 
 const BYTES_PER_BINARY_UNIT = 1024;
 const BINARY_BYTE_UNITS = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB'];
-// One decimal place in every unit above bytes, so sizes in a column and "sent / total" line up.
+// バイトより大きい単位はすべて小数1桁にし、列に並んだサイズや"sent / total"の桁をそろえる。
 const BYTE_UNIT_FRACTION_DIGITS = 1;
 
-// Steps for "5 minutes ago": each unit is used until the next larger one fits.
+// "5 minutes ago"の段階。次に大きい単位で表せるまで、その単位を使う。
 const RELATIVE_TIME_UNITS: Array<{ unit: Intl.RelativeTimeFormatUnit; seconds: number }> = [
   { unit: 'year', seconds: 365 * 24 * 60 * 60 },
   { unit: 'month', seconds: 30 * 24 * 60 * 60 },
@@ -18,7 +18,7 @@ const RELATIVE_TIME_UNITS: Array<{ unit: Intl.RelativeTimeFormatUnit; seconds: n
   { unit: 'minute', seconds: 60 },
 ];
 
-/** Keeps one formatter per Intl locale; building them is slow enough to show in long tables. */
+/** Intlのロケールごとにフォーマッターを1つ持つ。作るのに時間がかかり、長い表では遅さが目に見えるため。 */
 function memoizePerIntlLocale<Formatter>(create: (intlLocale: string) => Formatter) {
   const formatters = new Map<string, Formatter>();
   return (intlLocale: string): Formatter => {
@@ -45,14 +45,14 @@ const getRelativeTimeFormat = memoizePerIntlLocale(
 const roundToShownDigits = (value: number) =>
   Math.round(value * 10 ** BYTE_UNIT_FRACTION_DIGITS) / 10 ** BYTE_UNIT_FRACTION_DIGITS;
 
-/** "1.5 MiB": binary units, since the sizes are divided by 1024. */
+/** "1.5 MiB"。1024で割るので、2進の単位を使う。 */
 export function formatBytes(bytes: number, intlLocale: string): string {
   let unitIndex = Math.min(
     Math.floor(Math.log(Math.max(bytes, 1)) / Math.log(BYTES_PER_BINARY_UNIT)),
     BINARY_BYTE_UNITS.length - 1,
   );
   if (unitIndex === 0) return `${Math.round(bytes)} B`;
-  // 1023.96 KiB would round to "1024.0 KiB"; it reads as 1.0 MiB instead.
+  // 1023.96 KiBは丸めると"1024.0 KiB"になるので、代わりに1.0 MiBと表す。
   if (roundToShownDigits(bytes / BYTES_PER_BINARY_UNIT ** unitIndex) >= BYTES_PER_BINARY_UNIT) {
     unitIndex = Math.min(unitIndex + 1, BINARY_BYTE_UNITS.length - 1);
   }
@@ -60,7 +60,7 @@ export function formatBytes(bytes: number, intlLocale: string): string {
   return `${value} ${BINARY_BYTE_UNITS[unitIndex]}`;
 }
 
-/** "5分前", "yesterday" ... measured from `now`. A clock slightly ahead reads as now. */
+/** "5分前"、"yesterday"などの形。`now`から測る。時計が少し進んでいて未来になった時刻は「今」と表す。 */
 export function formatRelativeTime(
   value: string | number | Date,
   { intlLocale, now = Date.now() }: { intlLocale: string; now?: number },

@@ -1,14 +1,14 @@
 /*
- * Components shared by Mado and Mado Model Tracking: buttons, notices, the page frame and header,
- * section headings, details lists, tabs, form fields, dialogs, data tables, status badges, popovers
- * and the responsive table.
- * Needs tokens.css and base.css. Width changes use the shared breakpoints 640px, 900px and 1200px.
+ * mado S3 Data Catalogとmado ML Trackingが共有する部品。ボタン、通知、ページの枠と見出し部分、
+ * 節の見出し、項目と値の一覧、タブ、フォームの入力欄、ダイアログ、データの表、状態バッジ、
+ * ポップオーバー、レスポンシブな表。
+ * tokens.cssとbase.cssが必要。幅による切り替えには、共通の切り替え幅640px・900px・1200pxを使う。
  */
 :root {
   --page-padding: 32px;
 }
 
-/* ── Buttons ─────────────────────────────────────────────────────────── */
+/* ── ボタン ──────────────────────────────────────────────────────────── */
 .button {
   min-height: 36px;
   border: 1px solid var(--border);
@@ -49,7 +49,7 @@
   justify-content: center;
   border: 0;
   background: transparent;
-  /* A link drawn as an icon button keeps the text colour, like a button does. */
+  /* アイコンボタンとして描くリンクも、ボタンと同じく文字色のままにする。 */
   color: inherit;
   width: 32px;
   height: 32px;
@@ -70,7 +70,7 @@
   text-decoration: underline;
 }
 
-/* ── Feedback ────────────────────────────────────────────────────────── */
+/* ── フィードバック ──────────────────────────────────────────────────── */
 .state-message {
   min-height: 110px;
   display: flex;
@@ -104,12 +104,12 @@
   background: var(--success-tint);
   border-left-color: var(--success);
 }
-/* Something to look at before going on: a stopped scan, a setting the server lacks. */
+/* 先へ進む前に見てほしいこと。止まったスキャン、サーバーに無い設定など。 */
 .notice.warning {
   border-left-color: var(--warning);
 }
 
-/* ── Page frame and header ───────────────────────────────────────────── */
+/* ── ページの枠と見出し部分 ──────────────────────────────────────────── */
 .page {
   padding: 26px var(--page-padding) 40px;
   min-width: 0;
@@ -152,8 +152,8 @@
   flex-shrink: 0;
 }
 
-/* ── Section headings and details ────────────────────────────────────── */
-/* A section's heading with its actions on the same line. */
+/* ── 節の見出しと詳細 ────────────────────────────────────────────────── */
+/* 節の見出しと、同じ行に並べるその節の操作。 */
 .section-heading {
   display: flex;
   justify-content: space-between;
@@ -168,7 +168,7 @@
   display: flex;
   gap: 8px;
 }
-/* Label and value pairs, one per row. */
+/* 項目名と値の組。1行に1組。 */
 .details-list {
   margin: 0;
   font-size: var(--font-size-sm);
@@ -187,7 +187,7 @@
   margin: 0;
   overflow-wrap: anywhere;
 }
-/* Formatted JSON or other preformatted text in a tinted box. */
+/* 整形したJSONなどの整形済みテキストを、淡い色の箱に入れる。 */
 .json-view {
   padding: 16px;
   background: var(--surface);
@@ -195,7 +195,7 @@
   line-height: 1.6;
 }
 
-/* ── Tabs ────────────────────────────────────────────────────────────── */
+/* ── タブ ────────────────────────────────────────────────────────────── */
 .tabs {
   display: flex;
   border-bottom: 1px solid var(--border);
@@ -224,7 +224,7 @@
   text-decoration: none;
 }
 
-/* ── Form fields ─────────────────────────────────────────────────────── */
+/* ── フォームの入力欄 ────────────────────────────────────────────────── */
 .field {
   display: flex;
   flex-direction: column;
@@ -257,15 +257,15 @@
   gap: 10px;
   padding: 8px 0;
 }
-/* A field that has nothing to choose explains why in place of the control. */
+/* 選べるものが無い入力欄は、操作部品の代わりにその理由を出す。 */
 .field-note {
   margin: 0;
 }
-/* A collapsible block inside a form keeps the same distance to the next field as a field does. */
+/* フォームの中の折りたためる部分も、入力欄と同じだけ次の入力欄との間を空ける。 */
 .form-details {
   margin-bottom: 16px;
 }
-/* A heading that splits a long form into parts. */
+/* 長いフォームをいくつかに区切る見出し。 */
 .form-section-heading {
   margin: 8px 0 12px;
   padding-top: 14px;
@@ -295,7 +295,7 @@
   border-bottom-color: var(--accent);
 }
 
-/* ── Dialogs ─────────────────────────────────────────────────────────── */
+/* ── ダイアログ ──────────────────────────────────────────────────────── */
 .dialog {
   border: 1px solid var(--border);
   padding: 0;
@@ -312,7 +312,8 @@
 .dialog.extra-wide {
   width: min(1040px, calc(100vw - 32px));
 }
-/* The dialog takes the focus itself only on a touch screen (useModalDialog); no ring around it. */
+/* ダイアログ自身がフォーカスを持つのはタッチ画面のときだけ（useModalDialog）。周りにフォーカス
+   リングは出さない。 */
 .dialog:focus-visible {
   outline: none;
 }
@@ -337,7 +338,7 @@
 .dialog > header .dialog-heading {
   min-width: 0;
 }
-/* The line under the title, such as the path the dialog is about. */
+/* タイトルの下の行。ダイアログの対象のパスなど。 */
 .dialog > header .dialog-heading > p {
   margin: 4px 0 0;
   color: var(--muted);
@@ -369,7 +370,7 @@
   margin: 22px;
 }
 
-/* ── Data tables ─────────────────────────────────────────────────────── */
+/* ── データの表 ──────────────────────────────────────────────────────── */
 .table-scroll {
   overflow-x: auto;
   max-width: 100%;
@@ -430,7 +431,7 @@ tr.selected td {
   align-items: center;
 }
 
-/* ── Status badges ───────────────────────────────────────────────────── */
+/* ── 状態バッジ ──────────────────────────────────────────────────────── */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -445,7 +446,7 @@ tr.selected td {
   background: var(--status-success-background);
   color: var(--status-success-text);
 }
-/* In progress. */
+/* 進行中。 */
 .status-badge.status-info {
   background: var(--status-info-background);
   color: var(--status-info-text);
@@ -454,22 +455,22 @@ tr.selected td {
   background: var(--status-danger-background);
   color: var(--status-danger-text);
 }
-/* Waiting, cancelled, or no state worth a color. */
+/* 待機中、キャンセル済み、または色を付けるほどでもない状態。 */
 .status-badge.status-neutral {
   background: var(--status-neutral-background);
   color: var(--status-neutral-text);
 }
-/* Waits for a person. */
+/* 人の対応を待っている。 */
 .status-badge.status-attention {
   background: var(--status-attention-background);
   color: var(--status-attention-text);
 }
-/* A mark in the brand color: the default of a list, the latest version. */
+/* ブランド色の印。一覧の既定、最新の版など。 */
 .status-badge.status-accent {
   background: var(--accent-tint);
   color: var(--link);
 }
-/* Badges beside a label in one cell. */
+/* 1つのセルの中で、ラベルの横に並べるバッジ。 */
 .badge-group {
   display: inline-flex;
   flex-wrap: wrap;
@@ -477,7 +478,7 @@ tr.selected td {
   gap: 4px;
 }
 
-/* ── Popover menus ───────────────────────────────────────────────────── */
+/* ── ポップオーバーのメニュー ────────────────────────────────────────── */
 .popover {
   position: absolute;
   z-index: 8;
@@ -491,14 +492,14 @@ tr.selected td {
   border: 1px solid var(--border);
   background: var(--background);
 }
-/* A popover anchored with useAnchoredPopover: position: fixed, placed by the hook. */
+/* useAnchoredPopoverでボタンに合わせて置くポップオーバー。position: fixedで、位置はhookが決める。 */
 .popover.anchored-popover {
   position: fixed;
   margin: 0;
   right: auto;
   min-width: 0;
 }
-/* A popover that lists actions or choices instead of holding a form. */
+/* フォームでなく、操作や選択肢を並べるポップオーバー。 */
 .popover.menu {
   padding: 4px 0;
 }
@@ -530,7 +531,7 @@ tr.selected td {
   cursor: default;
 }
 .menu-item[aria-checked='false'] {
-  /* Lines up with the checked item, whose check mark (15px and the gap) comes first. */
+  /* チェック済みの項目は先頭にチェックの印（15pxと間隔）があるので、その項目と頭をそろえる。 */
   padding-left: calc(14px + 15px + 8px);
 }
 .menu-item.danger {
@@ -543,7 +544,7 @@ tr.selected td {
   background: var(--border);
 }
 
-/* ── The bar above a list: a search field and controls, wrapping when they do not fit ── */
+/* ── 一覧の上のバー: 検索欄と操作部品。収まらなければ折り返す ── */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -551,7 +552,7 @@ tr.selected td {
   min-height: 40px;
   background: var(--surface);
 }
-/* A magnifier and an input without its own frame; also used alone, outside a toolbar. */
+/* 虫眼鏡と、自分の枠を持たない入力欄。ツールバーの外で単独でも使う。 */
 .toolbar-search {
   display: flex;
   flex: 1 1 320px;
@@ -583,7 +584,7 @@ tr.selected td {
 .toolbar-search > input:focus-visible {
   outline: none;
 }
-/* The field draws its own clear button. */
+/* 消去ボタンはこの入力欄が自分で描く。 */
 .toolbar-search > input::-webkit-search-cancel-button {
   -webkit-appearance: none;
   appearance: none;
@@ -593,7 +594,7 @@ tr.selected td {
   height: 28px;
   color: var(--muted);
 }
-/* A control beside the search: a select, a checkbox, a filter. */
+/* 検索欄の横の操作部品。選択欄、チェックボックス、絞り込みなど。 */
 .toolbar-item {
   display: flex;
   flex: 0 0 auto;
@@ -605,7 +606,7 @@ tr.selected td {
   font-size: var(--font-size-sm);
 }
 
-/* ── Breadcrumbs: the path to the current page or folder ─────────────── */
+/* ── パンくずリスト: 今のページやフォルダーまでの道筋 ────────────────── */
 .breadcrumbs {
   display: flex;
   flex-wrap: wrap;
@@ -617,16 +618,16 @@ tr.selected td {
   margin: 0;
 }
 
-/* ── Responsive table: primary columns stay in the row, secondary ones open beneath it ── */
-/* Keeps the visually hidden header labels inside the scroll box instead of widening the page. */
+/* ── レスポンシブな表: 主な列は行に残し、ほかの列は行の下に開く ── */
+/* 見た目では隠した見出しのラベルを、ページを広げずにスクロールの枠の中にとどめる。 */
 .responsive-table {
   position: relative;
 }
-/* Text cells keep a few characters per line; a squeezed table scrolls inside its box instead. */
+/* 文字のセルは1行に数文字を残す。詰まった表は、代わりに枠の中でスクロールする。 */
 .responsive-table td:not(.responsive-table-toggle) {
   min-width: 6em;
 }
-/* URLs and digests have no spaces, so they break anywhere rather than widen their column. */
+/* URLやダイジェストには空白が無いので、列を広げずにどこででも折り返す。 */
 .responsive-table .long-value {
   overflow-wrap: anywhere;
 }
@@ -661,13 +662,13 @@ tr.responsive-table-details:hover > td {
   overflow-wrap: anywhere;
 }
 
-/* ── Widths ──────────────────────────────────────────────────────────── */
+/* ── 画面幅 ──────────────────────────────────────────────────────────── */
 @media (width < 1200px) {
   :root {
     --page-padding: 24px;
   }
 }
-/* Narrow screens are mostly touch screens: everything tapped gets at least --tap-target. */
+/* 狭い画面はたいていタッチ画面なので、タップするものすべてに少なくとも--tap-targetの大きさを持たせる。 */
 @media (width < 900px) {
   :root {
     --page-padding: 18px;
@@ -690,7 +691,7 @@ tr.responsive-table-details:hover > td {
     flex-wrap: wrap;
     justify-content: flex-end;
   }
-  /* Screens marked `touch-targets` also give finger-sized targets to links, summaries and labels. */
+  /* `touch-targets`を付けた画面では、リンク・summary・ラベルにも指で押せる大きさを持たせる。 */
   .touch-targets .button {
     min-width: var(--tap-target);
   }
@@ -713,10 +714,9 @@ tr.responsive-table-details:hover > td {
     min-height: var(--tap-target);
   }
 }
-/* Links in text and table cells stay inline so table rows stay short, and grow only their tappable
-   area: an inline box's padding takes taps without moving the text around it, and the negative
-   margin keeps the text where it was sideways. The padding reaches the WCAG 2.5.8 minimum target
-   with the 13px text. */
+/* 文中と表のセルのリンクは、表の行が高くならないようインラインのまま、タップできる範囲だけを
+   広げる。インラインボックスのpaddingは周りの文字を動かさずにタップを受け、負のmarginで文字を
+   横方向の元の位置にとどめる。このpaddingと13pxの文字で、WCAG 2.5.8の最小の大きさに届く。 */
 :root {
   --inline-link-tap-padding-block: 5px;
   --inline-link-tap-padding-inline: 8px;
@@ -727,12 +727,12 @@ tr.responsive-table-details:hover > td {
     padding: var(--inline-link-tap-padding-block) var(--inline-link-tap-padding-inline);
     margin-inline: calc(-1 * var(--inline-link-tap-padding-inline));
   }
-  /* A plain summary as tall as a button; a summary that opens a .popover is styled as a button. */
+  /* 飾りの無いsummaryはボタンと同じ高さにする。.popoverを開くsummaryはボタンの見た目にする。 */
   .touch-targets details:not(:has(> .popover)) > summary:not([class]) {
     padding-block: calc((var(--tap-target) - 1lh) / 2);
   }
 }
-/* Below 640px a dialog fills the screen; a short confirmation becomes a sheet on the bottom edge. */
+/* 640px未満では、ダイアログは画面いっぱいに広がり、短い確認は下端のシートになる。 */
 @media (width < 640px) {
   :root {
     --page-padding: 14px;
@@ -790,9 +790,9 @@ tr.responsive-table-details:hover > td {
   }
 }
 
-/* ── Charts drawn with recharts ──────────────────────────────────────── */
-/* recharts writes #666 into the SVG, which keeps only 3:1 on the dark background; the muted text
-   keeps 4.5:1 on both themes. */
+/* ── rechartsで描くグラフ ────────────────────────────────────────────── */
+/* rechartsはSVGに#666を書き込み、これは暗い背景では3:1しか保てない。薄い文字色なら、どちらの
+   テーマでも4.5:1を保つ。 */
 .recharts-cartesian-axis-tick-value,
 .recharts-label {
   fill: var(--muted);

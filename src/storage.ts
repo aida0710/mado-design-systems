@@ -1,6 +1,6 @@
 /*
- * localStorage that never throws. Private browsing and blocked site data make it unavailable;
- * the apps then keep the user's choices only while the page is open.
+ * 例外を投げないlocalStorage。プライベートブラウズやサイトデータのブロックでは使えないので、
+ * そのときアプリは利用者の選択を、ページを開いている間だけ保つ。
  */
 export function readStorage(key: string): string | null {
   try {
@@ -14,6 +14,6 @@ export function writeStorage(key: string, value: string): void {
   try {
     localStorage.setItem(key, value);
   } catch {
-    /* The choice still applies until the page is closed. */
+    /* ページを閉じるまでは、選択がそのまま効く。 */
   }
 }

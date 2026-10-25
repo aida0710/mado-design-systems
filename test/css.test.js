@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-// The rules of README.md for the stylesheets: colors only as tokens, every variable defined here,
-// the dark theme overriding light values only, and the three widths both apps switch at.
+// README.mdに書いたスタイルシートの決まり。色は変数だけで書く、使う変数はすべてここで定義する、
+// ダークテーマはライトの値を上書きするだけ、両アプリが切り替える3つの幅。
 const root = new URL('../', import.meta.url);
 const read = (name) => readFileSync(new URL(name, root), 'utf8');
 const withoutComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');

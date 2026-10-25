@@ -7,7 +7,7 @@ import { LanguagePicker } from '../src/react/LanguagePicker';
 import { useCodeLanguage } from '../src/react/useCodeLanguage';
 import { useNavigationLayout } from '../src/react/useNavigationLayout';
 
-// jsdom has no modal dialogs; these stand in for the browser's open and close.
+// jsdomにはモーダルダイアログが無いので、ブラウザの開く・閉じるの代わりにこれを使う。
 beforeAll(() => {
   HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogElement) {
     this.setAttribute('open', '');
@@ -68,7 +68,7 @@ describe('createLocaleStore', () => {
     store.setLocale('en');
     render(<LanguagePicker store={store} label="Language" />);
     fireEvent.click(screen.getByRole('button', { name: 'Language: English' }));
-    fireEvent.click(// jsdom has no Popover API, so the menu never leaves the hidden popover state.
+    fireEvent.click(// jsdomにはPopover APIが無いので、メニューはポップオーバーの隠れた状態から出ない。
     screen.getByRole('menuitemradio', { name: '日本語', hidden: true }));
     expect(store.getLocale()).toBe('ja');
   });

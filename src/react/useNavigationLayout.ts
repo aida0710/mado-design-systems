@@ -3,17 +3,17 @@ import { clampNavigationWidth, narrowerThan, NAVIGATION_WIDTH, storedNavigationW
 import { readStorage, writeStorage } from '../storage';
 import { useMediaQuery } from './useMediaQuery';
 
-// Below md the screen is too narrow even for the rail of icons, so a drawer holds the navigation;
-// below lg the full sidebar would squeeze the content, so only the rail shows.
+// md未満ではアイコンのレールでも狭すぎるので、ドロワーにナビゲーションを収める。
+// lg未満では通常のサイドバーが中身を圧迫するので、レールだけを出す。
 const DRAWER_QUERY = narrowerThan('md');
 const RAIL_QUERY = narrowerThan('lg');
 
-/** sidebar: names and icons; rail: icons only; drawer: behind the menu button in the top bar. */
+/** sidebar: 名前とアイコン。rail: アイコンだけ。drawer: 上部バーのメニューボタンの奥。 */
 export type NavigationMode = 'sidebar' | 'rail' | 'drawer';
 
 export interface NavigationLayout {
   mode: NavigationMode;
-  /** Wide screens let the user switch between the full sidebar and the rail. */
+  /** 広い画面では、利用者が通常のサイドバーとレールを切り替えられる。 */
   canCollapse: boolean;
   toggleCollapsed: () => void;
   width: number;
@@ -22,8 +22,8 @@ export interface NavigationLayout {
 }
 
 /**
- * How the navigation shows at the current screen width, with the width and collapsed state the
- * user chose for the full sidebar, saved as `<storageKeyPrefix>.collapsed` and `.width`.
+ * 今の画面幅でのナビゲーションの出し方と、利用者が通常のサイドバーに選んだ幅と折りたたみの状態。
+ * 選んだ状態は`<storageKeyPrefix>.collapsed`と`.width`に保存する。
  */
 export function useNavigationLayout({ storageKeyPrefix }: { storageKeyPrefix: string }): NavigationLayout {
   const collapsedKey = `${storageKeyPrefix}.collapsed`;

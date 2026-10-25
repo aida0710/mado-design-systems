@@ -1,12 +1,12 @@
 /*
- * The light and dark themes. Writing the theme to <html data-theme> switches the colors of
- * tokens.css. Until the user picks one, the page follows the OS setting.
+ * ライトテーマとダークテーマ。テーマを<html data-theme>に書くと、tokens.cssの色が切り替わる。
+ * 利用者が選ぶまでは、ページはOSの設定に従う。
  */
 import { readStorage, writeStorage } from './storage';
 
 export type Theme = 'light' | 'dark';
 
-/** The theme saved under `storageKey`, else the OS setting. */
+/** `storageKey`に保存したテーマ。無ければOSの設定。 */
 export function initialTheme(storageKey: string): Theme {
   const stored = readStorage(storageKey);
   if (stored === 'light' || stored === 'dark') return stored;
@@ -17,12 +17,12 @@ export function initialTheme(storageKey: string): Theme {
     : 'light';
 }
 
-/** Saves the user's pick. Only an explicit pick is saved, so the OS setting applies until then. */
+/** 利用者が選んだテーマを保存する。明示的に選んだときだけ保存するので、それまではOSの設定が効く。 */
 export function saveTheme(storageKey: string, theme: Theme): void {
   writeStorage(storageKey, theme);
 }
 
-/** The theme on <html data-theme>. */
+/** <html data-theme>にあるテーマ。 */
 export function readDocumentTheme(): Theme {
   return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 }

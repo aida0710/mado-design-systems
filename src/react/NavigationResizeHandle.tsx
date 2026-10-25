@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 import { NAVIGATION_WIDTH } from '../layout';
 
 /**
- * The right edge of the full sidebar. Drag it, or focus it and use ←/→ (Home/End for the smallest
- * and largest width) to change the width; a double click or Enter goes back to the default width.
+ * 通常のサイドバーの右端。ドラッグするか、フォーカスして←/→（最小と最大の幅はHome/End）で幅を
+ * 変える。ダブルクリックかEnterで既定の幅に戻る。
  */
 export function NavigationResizeHandle({
   width,
@@ -14,7 +14,7 @@ export function NavigationResizeHandle({
   width: number;
   onResize: (width: number) => void;
   onReset: () => void;
-  /** The accessible name, such as "Sidebar width", in the display language. */
+  /** 読み上げの名前（"Sidebar width"など）。表示言語で渡す。 */
   label: string;
 }) {
   const dragStart = useRef<{ pointerX: number; width: number } | null>(null);

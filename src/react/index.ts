@@ -1,6 +1,6 @@
 /*
- * React hooks and components shared by the apps. Every text is passed in by the app in its display
- * language, since each app keeps its own translation catalog.
+ * 両アプリが共有するReactのhookと部品。文言はすべてアプリが表示言語で渡す。各アプリが自分の
+ * 翻訳カタログを持つため。
  */
 export { Dialog, type DialogNarrowLayout, type DialogProps, type DialogSize } from './Dialog';
 export { LanguagePicker } from './LanguagePicker';

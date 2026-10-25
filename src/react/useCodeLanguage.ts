@@ -2,15 +2,15 @@ import { useMemo, useState } from 'react';
 import { detectLanguage, isCodeLanguage, type CodeLanguage } from '@mado/design-system/code';
 import { readStorage, writeStorage } from '../storage';
 
-/** 'auto' follows the detected format; any other value is the format the user picked. */
+/** 'auto'は判定した形式に従う。ほかの値は利用者が選んだ形式。 */
 export type CodeLanguageChoice = CodeLanguage | 'auto';
 
-// .txt holds anything, so a pick for one .txt file says nothing about the next.
+// .txtには何でも入るので、ある.txtで選んだ形式は次の.txtには当てはまらない。
 const UNREMEMBERED_EXTENSIONS = new Set(['txt', 'text']);
 
 /**
- * The key a pick is remembered under: the extension, '.env' for .env files and 'dockerfile' for
- * Dockerfiles. Other names without an extension and .txt get '' and their pick is not remembered.
+ * 選んだ形式を覚えるキー。拡張子、.envのファイルは'.env'、Dockerfileは'dockerfile'。拡張子の
+ * 無いほかの名前と.txtは''になり、選んだ形式を覚えない。
  */
 export function codeLanguageKey(fileName: string): string {
   const name = fileName.split('/').pop()?.toLowerCase() ?? '';
@@ -34,7 +34,7 @@ function readChoices(storageKey: string): Record<string, CodeLanguage> {
 function storedChoice(storageKey: string, key: string): CodeLanguageChoice {
   if (!key) return 'auto';
   const choices = readChoices(storageKey);
-  // Own keys only, so a file named "notes.constructor" does not read Object's members.
+  // 自身のキーだけを引く。"notes.constructor"という名前のファイルでObjectのメンバーを読まないように。
   return Object.hasOwn(choices, key) ? (choices[key] ?? 'auto') : 'auto';
 }
 
@@ -46,17 +46,17 @@ function writeChoice(storageKey: string, key: string, choice: CodeLanguageChoice
 }
 
 export interface CodeLanguageState {
-  /** The format detected from the file name, media type and content. */
+  /** ファイル名・メディアタイプ・中身から判定した形式。 */
   detected: CodeLanguage;
   choice: CodeLanguageChoice;
-  /** The format the text is colored as. */
+  /** テキストの色付けに使う形式。 */
   language: CodeLanguage;
   setChoice: (choice: CodeLanguageChoice) => void;
 }
 
 /**
- * The format of a previewed text: detected (code.js), unless the user picked one for files of this
- * kind, which is saved per extension under `storageKey`.
+ * プレビューするテキストの形式。判定した形式（code.js）を使うが、利用者がこの種類のファイルに
+ * 形式を選んでいればそれを使う。選んだ形式は`storageKey`の下に拡張子ごとに保存する。
  */
 export function useCodeLanguage({
   storageKey,
@@ -71,7 +71,7 @@ export function useCodeLanguage({
 }): CodeLanguageState {
   const detected = useMemo(() => detectLanguage({ fileName, mimeType, text }), [fileName, mimeType, text]);
   const key = codeLanguageKey(fileName);
-  // The pick made in this preview. Another file (another key) reads its own pick from storage.
+  // このプレビューで選んだ形式。別のファイル（別のキー）は、自分の選んだ形式を保存先から読む。
   const [picked, setPicked] = useState<{ key: string; choice: CodeLanguageChoice } | null>(null);
   const choice = picked?.key === key ? picked.choice : storedChoice(storageKey, key);
   return {

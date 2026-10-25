@@ -1,12 +1,12 @@
 /*
- * Where a menu under a button (position: fixed) goes so that it stays on the screen.
+ * ボタンの下に開くメニュー（position: fixed）を、画面からはみ出さない位置に置く。
  */
 
-/** The space always kept between a menu and the edge of the screen. */
+/** メニューと画面の端の間に必ず空ける間隔。 */
 export const DROPDOWN_VIEWPORT_MARGIN = 8;
-// The gap between the menu and the button that opened it.
+// メニューと、それを開いたボタンの間隔。
 const DROPDOWN_ANCHOR_GAP = 4;
-// With less room than this below the button and more above, the menu opens upward.
+// ボタンの下の空きがこれより狭く、上の方が広いときは、メニューを上に開く。
 const DROPDOWN_MIN_HEIGHT_BELOW = 200;
 
 export type DropdownAlignment = 'start' | 'end';
@@ -18,7 +18,7 @@ export interface DropdownAnchor {
   width: number;
 }
 
-/** The place of a position: fixed menu. Exactly one of top and bottom is set. */
+/** position: fixedのメニューの位置。topとbottomのどちらか一方だけが入る。 */
 export interface DropdownPlacement {
   left: number;
   width: number;
@@ -28,10 +28,10 @@ export interface DropdownPlacement {
 }
 
 /**
- * Puts the menu under `anchor` (the button, in screen coordinates) and keeps it on the screen.
- * The width is the wider of the button and `minWidth`; with `contentWidth` (the width of the
- * content) it grows to fit the content up to `maxWidth`. On a narrow screen the menu shrinks to the
- * screen, past the right edge it moves left, and with little room below it opens upward.
+ * メニューを`anchor`（ボタン。画面の座標）の下に置き、画面からはみ出さないようにする。
+ * 幅はボタンと`minWidth`の広い方。`contentWidth`（中身の幅）を渡すと、`maxWidth`まで中身に
+ * 合わせて広げる。狭い画面では画面の幅まで縮め、右端からはみ出すなら左へずらし、下の空きが
+ * 少なければ上に開く。
  */
 export function placeDropdown({
   anchor,

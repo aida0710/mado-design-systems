@@ -3,34 +3,34 @@ import { X } from 'lucide-react';
 import { useModalDialog } from './useModalDialog';
 
 export type DialogSize = 'default' | 'wide' | 'extra-wide';
-/** Below 640px: 'fullscreen' fills the screen, 'sheet' rises from the bottom (short confirmations). */
+/** 640px未満での形。'fullscreen'は画面いっぱい、'sheet'は下から出る（短い確認向け）。 */
 export type DialogNarrowLayout = 'fullscreen' | 'sheet';
 
 export interface DialogProps {
   title: ReactNode;
-  /** A small line under the title, such as the path the dialog is about. */
+  /** タイトルの下の小さな行。ダイアログの対象のパスなど。 */
   subtitle?: ReactNode;
-  /** Called by the close button, Escape and, with `closesOnBackdropClick`, a click outside. */
+  /** 閉じるボタン、Escape、`closesOnBackdropClick`のときは外側のクリックで呼ばれる。 */
   onClose: () => void;
-  /** The accessible name of the close button, in the display language. */
+  /** 閉じるボタンの読み上げの名前。表示言語で渡す。 */
   closeLabel: string;
-  /** False while the dialog must stay open (work in progress); the close button is disabled too. */
+  /** ダイアログを開いたままにすべき間（処理中）はfalse。閉じるボタンも無効になる。 */
   dismissible?: boolean;
-  /** Off by default, so a stray click does not throw away what the user typed into a form. */
+  /** 既定では無効。誤ったクリックで、利用者がフォームに入力した内容を捨てないように。 */
   closesOnBackdropClick?: boolean;
-  /** 560px by default, wide 740px, extra-wide 1040px. */
+  /** 既定は560px、wideは740px、extra-wideは1040px。 */
   size?: DialogSize;
   narrowLayout?: DialogNarrowLayout;
-  /** The buttons at the bottom, put in a <footer>. */
+  /** 下端のボタン。<footer>に入れる。 */
   footer?: ReactNode;
   className?: string;
-  /** The body. Callers pad it with <div className="dialog-body"> or a <form>. */
+  /** 本体。余白は呼び出し側が<div className="dialog-body">か<form>で付ける。 */
   children: ReactNode;
 }
 
 /**
- * A modal <dialog> with the title bar, body and buttons of .dialog. It opens while mounted, so
- * callers render it only while it is open (`{open && <Dialog … />}`).
+ * .dialogのタイトルバー・本体・ボタンを持つモーダルの<dialog>。マウントされている間は開いているので、
+ * 呼び出し側は開いている間だけ描く（`{open && <Dialog … />}`）。
  */
 export function Dialog({
   title,
@@ -55,8 +55,8 @@ export function Dialog({
     className,
   ].filter(Boolean);
   const closeOnBackdrop = (event: MouseEvent<HTMLDialogElement>) => {
-    // The content does not cover the padding box edge to edge in every layout, so a click counts as
-    // outside only when it lands outside the dialog's box, not merely on the <dialog> element.
+    // どのレイアウトでも中身がpaddingの枠を端から端まで覆うとは限らないので、<dialog>要素に当たった
+    // だけでなく、ダイアログの箱の外に当たったときだけ外側のクリックとみなす。
     if (!closesOnBackdropClick || !dismissible || event.target !== event.currentTarget) return;
     const box = event.currentTarget.getBoundingClientRect();
     const isOutside =
@@ -68,7 +68,7 @@ export function Dialog({
       ref={dialogRef}
       className={classes.join(' ')}
       aria-labelledby={titleId}
-      // useModalDialog focuses the dialog itself on a touch screen.
+      // タッチ画面では、useModalDialogがダイアログ自身にフォーカスする。
       tabIndex={-1}
       onCancel={(event) => {
         event.preventDefault();
@@ -81,7 +81,8 @@ export function Dialog({
           <h2 id={titleId}>{title}</h2>
           {subtitle && <p>{subtitle}</p>}
         </div>
-        {/* type="button": a dialog rendered inside a form would otherwise submit that form. */}
+        {/* type="button": これが無いと、フォームの中に描いたダイアログでは、このボタンがその
+            フォームを送信してしまう。 */}
         <button
           type="button"
           className="icon-button"

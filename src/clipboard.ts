@@ -1,9 +1,9 @@
 /*
- * Copies text on HTTPS and also on plain HTTP installations inside a LAN, where the Clipboard API
- * is unavailable and a selected textarea with execCommand('copy') still works.
+ * テキストをコピーする。HTTPSだけでなく、LANの中の素のHTTPで動かす環境でも使える。そこでは
+ * Clipboard APIが使えないが、選択したtextareaとexecCommand('copy')ならまだ動く。
  */
 
-/** Resolves to false when the browser refused both ways of copying. */
+/** ブラウザが両方のコピーの方法を拒んだときは、falseで解決する。 */
 export async function copyText(value: string): Promise<boolean> {
   try {
     if (navigator.clipboard?.writeText) {
@@ -11,7 +11,7 @@ export async function copyText(value: string): Promise<boolean> {
       return true;
     }
   } catch {
-    // Browser permissions can refuse the Clipboard API while a user-initiated copy still works.
+    // ブラウザの権限でClipboard APIが拒まれても、利用者の操作によるコピーなら動くことがある。
   }
   return copySelectedText(value);
 }
@@ -40,7 +40,7 @@ function copySelectedText(value: string): boolean {
   textarea.tabIndex = -1;
   textarea.setAttribute('aria-hidden', 'true');
   textarea.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
-  // Elements outside a modal dialog are inert, so the copy target must live inside the dialog.
+  // モーダルダイアログの外の要素は操作できない（inert）ので、コピー用の要素はダイアログの中に置く。
   const container =
     focusedElement?.closest('dialog[open]') ?? document.querySelector('dialog[open]') ?? document.body;
   container.append(textarea);

@@ -1,8 +1,8 @@
 /*
- * The code view shared by Mado and Mado Model Tracking: a file preview or other preformatted text on
- * the dark code background, colored by code.js (highlight.js classes, CSV/TSV columns, log levels).
- * Needs tokens.css. Markup: <pre class="code-view"><code>…</code></pre>, and the format select as
- * <label class="code-format">…<select>…</select></label> in the app's own toolbar.
+ * mado S3 Data Catalogとmado ML Trackingが共有するコードの表示。ファイルのプレビューなどの整形済み
+ * テキストを暗いコードの地に出し、code.jsが色を付ける（highlight.jsのクラス、CSV・TSVの列、ログの
+ * レベル）。tokens.cssが必要。マークアップは<pre class="code-view"><code>…</code></pre>。形式の
+ * 選択欄は、アプリ自身のツールバーに<label class="code-format">…<select>…</select></label>で置く。
  */
 .code-view {
   margin: 0;
@@ -23,8 +23,8 @@
   font: inherit;
 }
 
-/* The format select: its label and a compact select on one line. Narrow screens keep the select's
-   --tap-target height from base.css. */
+/* 形式の選択欄。ラベルと小さめの選択欄を1行に並べる。狭い画面では、選択欄はbase.cssの
+   --tap-targetの高さのまま。 */
 .code-format {
   display: inline-flex;
   align-items: center;
@@ -40,7 +40,7 @@
 }
 
 /* ── highlight.js ───────────────────────────────────────────────────── */
-/* Comments stay upright: Japanese has no italic, and the browser would only slant it. */
+/* コメントは斜体にしない。日本語には斜体が無く、ブラウザが文字を傾けるだけになる。 */
 .code-view .hljs-comment,
 .code-view .hljs-quote {
   color: var(--code-muted);
@@ -60,7 +60,7 @@
 .code-view .hljs-symbol {
   color: var(--code-number);
 }
-/* JSON writes true, false and null as a keyword inside a literal; they keep the literal color. */
+/* JSONのtrue・false・nullは、literalの中のkeywordとして書かれる。これらはliteralの色のままにする。 */
 .code-view .hljs-literal,
 .code-view .hljs-literal .hljs-keyword {
   color: var(--code-literal);
@@ -111,7 +111,7 @@
   text-decoration: underline;
 }
 
-/* ── CSV and TSV: each column in its own color, repeating after six ─── */
+/* ── CSVとTSV: 列ごとに色を変え、6列ごとに繰り返す ──────────────────── */
 .code-view .code-column-0 {
   color: var(--code-property);
 }
@@ -131,7 +131,7 @@
   color: var(--code-type);
 }
 
-/* ── Logs: the time, and the level by how serious it is ──────────────── */
+/* ── ログ: 時刻と、深刻さに応じたレベル ──────────────────────────────── */
 .code-view .code-log-time {
   color: var(--code-muted);
 }

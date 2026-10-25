@@ -1,17 +1,16 @@
 import { useLayoutEffect, useState, type CSSProperties, type RefObject } from 'react';
 import { placeDropdown, type DropdownAlignment } from '../popover';
 
-// An element with the popover attribute goes to the top layer, so no overflow or stacking order of
-// a sidebar hides it. Elements without it, and browsers without the Popover API, only get
-// position: fixed.
+// popover属性を持つ要素はトップレイヤーに出るので、サイドバーのoverflowや重なり順で隠れない。
+// popover属性の無い要素と、Popover APIの無いブラウザでは、position: fixedだけになる。
 function showsInTopLayer(element: HTMLElement): boolean {
   return element.hasAttribute('popover') && typeof element.showPopover === 'function';
 }
 
 /**
- * While open, keeps the `popoverRef` element under the `anchorRef` element (above it when there is
- * no room) and on the screen, placing it again on resize and scroll. Returns the style to apply.
- * With `maxWidth`, the width fits the content between `minWidth` and `maxWidth`.
+ * 開いている間、`popoverRef`の要素を`anchorRef`の要素の下（空きが無ければ上）かつ画面の中に置き、
+ * リサイズとスクロールのたびに置き直す。適用するstyleを返す。
+ * `maxWidth`を渡すと、幅を`minWidth`から`maxWidth`の間で中身に合わせる。
  */
 export function useAnchoredPopover({
   isOpen,
@@ -52,13 +51,13 @@ export function useAnchoredPopover({
     };
     place();
     window.addEventListener('resize', place);
-    // Capturing also catches scrolling inside a sidebar or a table, which moves the button too.
+    // キャプチャ段階で受けて、サイドバーや表の中のスクロールも拾う。それらのスクロールでもボタンは動くため。
     window.addEventListener('scroll', place, true);
     return () => {
       window.removeEventListener('resize', place);
       window.removeEventListener('scroll', place, true);
       if (showsInTopLayer(popover) && popover.matches(':popover-open')) popover.hidePopover();
-      // The next opening measures again from the unplaced size (the width of the content).
+      // 次に開くときは、位置を決める前の大きさ（中身の幅）から測り直す。
       setStyle(undefined);
     };
   }, [isOpen, anchorRef, popoverRef, minWidth, maxWidth, maxHeight, alignment]);

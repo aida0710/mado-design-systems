@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { initialTheme, readDocumentTheme, saveTheme, type Theme } from '../theme';
 
-/** The light/dark switch. Writes the theme to <html data-theme>; the user's pick is saved. */
+/** ライト・ダークの切り替え。テーマを<html data-theme>に書き、利用者が選んだテーマを保存する。 */
 export function useTheme({ storageKey }: { storageKey: string }): { theme: Theme; toggle: () => void } {
   const [theme, setTheme] = useState<Theme>(() => initialTheme(storageKey));
   useEffect(() => {
@@ -16,8 +16,8 @@ export function useTheme({ storageKey }: { storageKey: string }): { theme: Theme
 }
 
 /**
- * The theme useTheme wrote to <html>, for drawing that cannot use CSS variables (canvas, Monaco).
- * It watches the attribute, so switching the theme in the header renders again.
+ * useThemeが<html>に書いたテーマ。CSSの変数を使えない描画（canvas、Monaco）のためのもの。
+ * 属性を監視するので、上部バーでテーマを切り替えると描き直す。
  */
 export function useDocumentTheme(): Theme {
   const [theme, setTheme] = useState<Theme>(readDocumentTheme);

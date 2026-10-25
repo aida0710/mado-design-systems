@@ -1,8 +1,8 @@
 /*
- * Element defaults shared by Mado and Mado Model Tracking: box model, form controls, links, focus,
- * headings and code, and small text helpers. Needs tokens.css.
- * The type size is set on body, not on the root, so rem-based utilities (Tailwind in Mado) keep
- * the browser's 16px root.
+ * mado S3 Data Catalogとmado ML Trackingが共有する要素の既定の見た目。ボックスモデル、フォームの
+ * 部品、リンク、フォーカス、見出しとコード、文字用の小さな補助クラス。tokens.cssが必要。
+ * 文字の大きさはルートでなくbodyに指定する。remで書くユーティリティ（mado S3 Data Catalogの
+ * Tailwind）が、ブラウザのルートの16pxのまま使えるように。
  */
 * {
   box-sizing: border-box;
@@ -61,9 +61,9 @@ textarea {
   padding: 9px 10px;
   min-width: 0;
 }
-/* The colours above replace the browser's own look for fields that cannot be changed, so those
-   fields show the surface colour and muted text instead. Kept at class strength so that a
-   component's own field style still wins. */
+/* 上の色は、変更できない入力欄に対するブラウザ自身の見た目も置き換えてしまう。そこで、それらの
+   入力欄は代わりに面の色と薄い文字色で示す。詳細度はクラスと同じにとどめ、部品ごとの入力欄の
+   指定が引き続き勝つようにする。 */
 :where(input:not([type='checkbox'], [type='radio']), select, textarea):disabled {
   background: var(--surface);
   color: var(--muted);
@@ -155,7 +155,7 @@ pre {
     transform: rotate(360deg);
   }
 }
-/* Narrow screens are mostly touch screens: fields get at least --tap-target. */
+/* 狭い画面はたいていタッチ画面なので、入力欄に少なくとも--tap-targetの大きさを持たせる。 */
 @media (width < 900px) {
   input:not([type='checkbox'], [type='radio']),
   select {

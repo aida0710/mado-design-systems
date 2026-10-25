@@ -1,5 +1,5 @@
-// Prints the notes of a GitHub Release: the version's section of CHANGELOG.md and how to install
-// the attached tarball. Usage: node scripts/release-notes.mjs <version>
+// GitHub Releaseの説明文を出力する。CHANGELOG.mdのその版の節と、添付したtarballのインストール方法。
+// 使い方: node scripts/release-notes.mjs <version>
 import { readFileSync } from 'node:fs';
 
 const version = process.argv[2];

@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 
 /**
- * The top of the sign-in card: the product logo, with the language menu on the same row at the
- * right. The sign-in and first password change screens use the same row.
+ * ログインのカードの上端。製品のロゴと、同じ行の右に表示言語のメニュー。ログインと、最初の
+ * パスワード変更の画面で同じ行を使う。
  */
 export function LoginHeader({ logo, languagePicker }: { logo: ReactNode; languagePicker: ReactNode }) {
   return (

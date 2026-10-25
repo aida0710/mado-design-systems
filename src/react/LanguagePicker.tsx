@@ -4,11 +4,11 @@ import { LANGUAGES, type LocaleStore } from '../locale';
 import { useAnchoredPopover } from './useAnchoredPopover';
 import { useLocale } from './useLocale';
 
-// The width of the shared popovers; the height fits the two language buttons.
+// 共通のポップオーバーの幅。高さは2つの言語のボタンに合わせる。
 const LANGUAGE_MENU_MIN_WIDTH = 220;
 const LANGUAGE_MENU_MAX_HEIGHT = 160;
 
-/** The display language menu, in the top bar and on the screens before signing in. */
+/** 表示言語のメニュー。上部バーと、ログイン前の画面に置く。 */
 export function LanguagePicker({ store, label }: { store: LocaleStore; label: string }) {
   const { locale, setLocale } = useLocale(store);
   const [isOpen, setIsOpen] = useState(false);

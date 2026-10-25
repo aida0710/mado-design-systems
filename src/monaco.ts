@@ -1,11 +1,11 @@
 /*
- * Monaco editor themes in the colors of tokens.css. Monaco cannot resolve CSS variables, so the
- * values are read from the root element with getComputedStyle. The app passes its Monaco module,
- * which keeps monaco-editor out of this package.
+ * tokens.cssの色で作るMonaco Editorのテーマ。MonacoはCSSの変数を解決できないので、値は
+ * getComputedStyleでルート要素から読む。Monacoのモジュールはアプリが渡すので、このパッケージは
+ * monaco-editorを含まない。
  */
 import type { Theme } from './theme';
 
-/** The part of `monaco.editor` the themes need. */
+/** テーマに必要な`monaco.editor`の部分。 */
 export interface MonacoThemeRegistry {
   defineTheme: (
     name: string,
@@ -20,7 +20,7 @@ export interface MonacoThemeRegistry {
 
 export const MONACO_THEME_NAMES: Record<Theme, string> = { light: 'mado-light', dark: 'mado-dark' };
 
-/** A token color (#rgb or #rrggbb) as #rrggbb, or undefined to keep Monaco's default. */
+/** トークンの色（#rgbか#rrggbb）を#rrggbbにする。undefinedならMonacoの既定のまま。 */
 function readColor(style: CSSStyleDeclaration, name: string): string | undefined {
   const value = style.getPropertyValue(name).trim();
   if (/^#[0-9a-f]{6}$/i.test(value)) return value;
@@ -30,14 +30,14 @@ function readColor(style: CSSStyleDeclaration, name: string): string | undefined
   return undefined;
 }
 
-/** #rrggbb with an opacity from 0 to 1, as #rrggbbaa. */
+/** #rrggbbと0〜1の不透明度を、#rrggbbaaにする。 */
 function withAlpha(color: string | undefined, alpha: number): string | undefined {
   return color && color + Math.round(alpha * 255).toString(16).padStart(2, '0');
 }
 
 /**
- * Defines the Monaco theme for `theme` from the token values the page has now, and returns its
- * name. Call it again after the theme changes, before the editor switches to the theme.
+ * ページの今のトークンの値から`theme`用のMonacoのテーマを定義し、その名前を返す。テーマが
+ * 変わったら、エディターをそのテーマに切り替える前にもう一度呼ぶ。
  */
 export function defineMonacoTheme(editor: MonacoThemeRegistry, theme: Theme): string {
   const style = getComputedStyle(document.documentElement);
@@ -67,7 +67,7 @@ export function defineMonacoTheme(editor: MonacoThemeRegistry, theme: Theme): st
   return name;
 }
 
-/** The monospace family of tokens.css (--mono) for the editor's fontFamily option. */
+/** エディターのfontFamilyの設定に渡す、tokens.cssの等幅の書体（--mono）。 */
 export function monacoFontFamily(): string {
   return getComputedStyle(document.documentElement).getPropertyValue('--mono').trim() || 'monospace';
 }

@@ -4,7 +4,7 @@ import { NavigationResizeHandle } from './NavigationResizeHandle';
 import type { NavigationLayout } from './useNavigationLayout';
 
 export interface NavigationSidebarLabels {
-  /** The accessible name of the <aside>, telling it apart from other sidebars on a page. */
+  /** <aside>の読み上げの名前。ページのほかのサイドバーと区別する。 */
   sidebar: string;
   expand: string;
   collapse: string;
@@ -12,13 +12,13 @@ export interface NavigationSidebarLabels {
 }
 
 /**
- * The navigation from md up: the full sidebar with names or, below lg or when the user collapses
- * it, a rail of icons. On wide screens the button at the bottom collapses or expands it and its
- * right edge changes the width. Narrower screens use NavigationDrawer instead.
+ * md以上のナビゲーション。名前の付いた通常のサイドバーか、lg未満または利用者が折りたたんだときは
+ * アイコンのレール。広い画面では、下端のボタンで折りたたみ・展開ができ、右端で幅を変えられる。
+ * それより狭い画面では、代わりにNavigationDrawerを使う。
  *
- * `renderLinks` draws the app's links; `showsTitles` is true on the rail, where the names are not
- * on screen and the links show them as tooltips. `header` (such as a project selector) shows only
- * in the full sidebar.
+ * `renderLinks`はアプリのリンクを描く。`showsTitles`はレールのときtrueで、名前が画面に出ないので
+ * リンクがツールチップで名前を出す。`header`（プロジェクトの選択欄など）は通常のサイドバーでだけ
+ * 出す。
  */
 export function NavigationSidebar({
   layout,

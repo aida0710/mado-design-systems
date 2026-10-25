@@ -1,7 +1,7 @@
 /*
- * Picks the format of a previewed text file and colors it for the code view (code.css).
- * Shared by Mado and Mado Model Tracking; each app keeps its own select and storage of the user's
- * choice. highlight.js colors the grammars it has; CSV, TSV and logs are colored here.
+ * プレビューするテキストファイルの形式を選び、コードの表示（code.css）用に色を付ける。
+ * mado S3 Data Catalogとmado ML Trackingが共有する。選択欄と、利用者が選んだ形式の保存は各アプリが
+ * 持つ。highlight.jsが持つ文法はhighlight.jsが色を付け、CSV・TSV・ログはここで色を付ける。
  */
 import hljs from 'highlight.js/lib/core';
 import bash from 'highlight.js/lib/languages/bash';
@@ -26,7 +26,7 @@ hljs.registerLanguage('sql', sql);
 hljs.registerLanguage('xml', xml);
 hljs.registerLanguage('yaml', yaml);
 
-/** The formats a preview can be shown as, in the order of the select. */
+/** プレビューで選べる表示形式。選択欄の並び順。 */
 export const CODE_LANGUAGES = [
   { id: 'plaintext', name: 'Text' },
   { id: 'json', name: 'JSON' },
@@ -47,7 +47,7 @@ export const CODE_LANGUAGES = [
 
 const LANGUAGE_IDS = new Set(CODE_LANGUAGES.map((language) => language.id));
 
-// The highlight.js grammar of each format. TOML is close enough to INI for its grammar.
+// 各形式に使うhighlight.jsの文法。TOMLはINIに十分近いので、INIの文法を使う。
 const GRAMMARS = {
   json: 'json',
   yaml: 'yaml',
@@ -135,17 +135,17 @@ const MIME_TYPES = {
   'text/x-sql': 'sql',
 };
 
-/** Coloring stops here; the rest of a longer text is shown as it is. */
+/** 色付けはここまで。これより長いテキストの残りは、色を付けずにそのまま出す。 */
 export const HIGHLIGHT_MAX_CHARS = 200_000;
 
-// Own keys only, so a name like "notes.constructor" does not find Object's members.
+// 自身のキーだけを引く。"notes.constructor"のような名前でObjectのメンバーを拾わないように。
 const lookup = (table, key) => (Object.hasOwn(table, key) ? table[key] : null);
 
 export function isCodeLanguage(value) {
   return typeof value === 'string' && LANGUAGE_IDS.has(value);
 }
 
-/** The format the file name tells, or null when it says nothing (no or unknown extension, .txt). */
+/** ファイル名から分かる形式。分からなければ（拡張子が無い・不明・.txt）null。 */
 export function languageFromName(fileName) {
   const name = String(fileName ?? '').split('/').pop().toLowerCase();
   if (!name) return null;
@@ -160,7 +160,7 @@ export function languageFromName(fileName) {
   return lookup(EXTENSIONS, name.slice(dot + 1));
 }
 
-/** The format the media type tells, or null for text/plain, octet-stream and the like. */
+/** メディアタイプから分かる形式。text/plainやoctet-streamなどではnull。 */
 export function languageFromMimeType(mimeType) {
   const type = String(mimeType ?? '').split(';')[0].trim().toLowerCase();
   if (!type) return null;
@@ -170,17 +170,17 @@ export function languageFromMimeType(mimeType) {
   return null;
 }
 
-// A line that starts with a date and time, a time, or a level.
+// 日時・時刻・レベルのどれかで始まる行。
 const LOG_LINE =
   /^\s*(\[?\d{4}[-/]\d{2}[-/]\d{2}[ T]\d{1,2}:\d{2}|\[?\d{1,2}:\d{2}:\d{2}|\[?(TRACE|DEBUG|INFO|NOTICE|WARN|WARNING|ERROR|ERR|FATAL|CRITICAL)\]?[\s:])/;
 
-// A TOML array of tables ([[tool.x]]) starts like a JSON array of arrays.
+// TOMLのテーブルの配列（[[tool.x]]）は、JSONの配列の配列と同じように始まる。
 function looksLikeJson(trimmed) {
   if (/^\[\[\s*[\w."-]+\s*\]\]/.test(trimmed)) return false;
   return /^\{\s*("|\})/.test(trimmed) || /^\[\s*([[{"\]\d-]|true\b|false\b|null\b)/.test(trimmed);
 }
 
-// The delimiter when the first lines split into the same number of columns (at least two).
+// 先頭の数行が同じ列数（2列以上）に分かれるときの区切り文字。
 function tableDelimiter(lines) {
   if (lines.length < 2) return null;
   const sample = lines.slice(0, 10);
@@ -204,8 +204,8 @@ function countOutsideQuotes(line, delimiter) {
 }
 
 /**
- * The format the content looks like, from the first lines. Strong signs (a JSON or XML start, a
- * shebang) win; otherwise most of the lines have to look alike. Falls back to plain text.
+ * 先頭の数行から見て、中身がどの形式に見えるか。強い手がかり（JSONやXMLの書き出し、shebang）を
+ * 優先し、それ以外では大半の行が同じ形に見える必要がある。どれでもなければプレーンテキスト。
  */
 export function guessLanguage(text) {
   const sample = String(text ?? '').slice(0, 8192);
@@ -251,7 +251,7 @@ export function guessLanguage(text) {
   return 'plaintext';
 }
 
-/** The file name decides first, then the media type, then the content. */
+/** ファイル名、メディアタイプ、中身の順に形式を決める。 */
 export function detectLanguage({ fileName, mimeType, text }) {
   return languageFromName(fileName) ?? languageFromMimeType(mimeType) ?? guessLanguage(text);
 }
@@ -265,7 +265,7 @@ export function escapeHtml(text) {
     .replace(/'/g, '&#39;');
 }
 
-// Each cell in a span for its column; quoted CSV cells may hold the delimiter and line breaks.
+// 各セルを列ごとのspanで囲む。引用符で囲んだCSVのセルは、区切り文字や改行を含むことがある。
 function colorizeTable(text, delimiter) {
   const parts = [];
   let cell = '';
@@ -297,8 +297,8 @@ function colorizeTable(text, delimiter) {
 
 const LOG_TIME =
   /^\s*\[?(\d{4}[-/]\d{2}[-/]\d{2}[ T]\d{1,2}:\d{2}(:\d{2}([.,]\d+)?)?(Z|[+-]\d{2}:?\d{2})?|\d{1,2}:\d{2}:\d{2}([.,]\d+)?)\]?/;
-// Upper-case words; lower-case or capitalized ones only in brackets or after level=, so "error" in
-// a message is left alone.
+// 大文字の語。小文字や先頭だけ大文字の語は、角かっこの中かlevel=の後だけ。メッセージの中の
+// "error"には色を付けない。
 const LOG_LEVEL =
   /\b(TRACE|DEBUG|INFO|NOTICE|WARN|WARNING|ERROR|ERR|FATAL|CRITICAL|PANIC|SEVERE)\b|\[([Tt]race|[Dd]ebug|[Ii]nfo|[Nn]otice|[Ww]arn(?:ing)?|[Ee]rr(?:or)?|[Ff]atal|[Cc]ritical)\]|\blevel=["']?(trace|debug|info|notice|warn(?:ing)?|err(?:or)?|fatal|critical)\b/;
 const LOG_SEVERITY = {
@@ -316,7 +316,7 @@ const LOG_SEVERITY = {
   severe: 'error',
 };
 
-// The time at the start of each line, and the first level within the line's first 80 characters.
+// 各行の先頭の時刻と、行の最初の80文字以内にある最初のレベル。
 function colorizeLog(text) {
   return text
     .split('\n')
@@ -351,8 +351,8 @@ function colorize(text, language) {
 }
 
 /**
- * The text as HTML for <code> inside .code-view: escaped, with spans for the colors. Only the
- * first HIGHLIGHT_MAX_CHARS are colored, so a large preview stays responsive.
+ * .code-viewの中の<code>に入れるHTML。テキストをエスケープし、色ごとにspanで囲む。大きなプレビュー
+ * でも操作が重くならないよう、色を付けるのは先頭のHIGHLIGHT_MAX_CHARS文字だけ。
  */
 export function highlightCode(text, language) {
   const value = String(text ?? '');
@@ -360,7 +360,7 @@ export function highlightCode(text, language) {
   return colorize(value.slice(0, end), language) + escapeHtml(value.slice(end));
 }
 
-// Coloring ends after the last whole line within the limit, or else not inside a surrogate pair.
+// 色付けは上限内の最後の完全な行の後で終える。そうできなければ、サロゲートペアの途中では切らない。
 function coloredLength(value) {
   const newline = value.lastIndexOf('\n', HIGHLIGHT_MAX_CHARS - 1);
   if (newline >= 0) return newline + 1;

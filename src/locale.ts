@@ -1,19 +1,22 @@
 /*
- * The display language: the one the user picked and saved, else the browser's preferred language,
- * else English. Each app keeps its own store under its own storage key, so picking a language in
- * one app does not change the other.
+ * 表示言語。利用者が選んで保存した言語、無ければブラウザの優先言語、それも無ければ英語。
+ * 各アプリは自分の保存キーで別々のストアを持つので、一方のアプリで言語を選んでも、もう一方は
+ * 変わらない。
  */
 import { readStorage, writeStorage } from './storage';
 
 export type Locale = 'en' | 'ja';
 
-/** Each language under its own name, so users find theirs whatever the current language is. */
+/**
+ * 各言語をその言語自身の名前で並べる。今の表示言語が何であっても、利用者が自分の言語を
+ * 見つけられるように。
+ */
 export const LANGUAGES: ReadonlyArray<{ locale: Locale; name: string }> = [
   { locale: 'ja', name: '日本語' },
   { locale: 'en', name: 'English' },
 ];
 
-// Used when the browser gives no language or none that the apps support.
+// ブラウザが言語を返さないか、アプリが対応する言語が無いときに使う。
 const FALLBACK_LOCALE: Locale = 'en';
 
 const INTL_LOCALES: Record<Locale, string> = { en: 'en-US', ja: 'ja-JP' };
@@ -34,13 +37,13 @@ function browserLocale(): Locale | null {
 
 export interface LocaleStore {
   getLocale: () => Locale;
-  /** The locale for Intl formatters, such as 'ja-JP'. */
+  /** Intlのフォーマッターに渡すロケール（'ja-JP'など）。 */
   getIntlLocale: () => string;
-  /** Changes the language and saves it as the user's pick. */
+  /** 言語を変え、利用者が選んだものとして保存する。 */
   setLocale: (next: Locale) => void;
-  /** Calls `listener` whenever the language changes, also when another tab changes it. */
+  /** 言語が変わるたびに`listener`を呼ぶ。ほかのタブで変えたときも呼ぶ。 */
   subscribe: (listener: () => void) => () => void;
-  /** Writes the language to <html lang>. Call once before the first render. */
+  /** 言語を<html lang>に書く。最初の描画の前に1回呼ぶ。 */
   applyToDocument: () => void;
 }
 
@@ -59,7 +62,7 @@ export function createLocaleStore({ storageKey }: { storageKey: string }): Local
     listeners.forEach((listener) => listener());
   };
   const syncFromOtherTab = (event: StorageEvent) => {
-    // A null key means another tab cleared the whole storage.
+    // keyがnullなら、ほかのタブがストレージ全体を消した。
     if (event.key !== storageKey && event.key !== null) return;
     update(readInitialLocale());
   };

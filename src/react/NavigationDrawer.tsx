@@ -4,14 +4,14 @@ import { Menu, X } from 'lucide-react';
 export interface NavigationDrawerLabels {
   open: string;
   close: string;
-  /** The accessible name of the drawer, such as "Main navigation". */
+  /** ドロワーの読み上げの名前（"Main navigation"など）。 */
   navigation: string;
 }
 
 /**
- * The navigation below md: the menu button in the top bar opens a drawer from the left. The drawer
- * is a modal <dialog>, so Escape closes it and the focus goes back to the button. A click outside
- * the drawer or on a link closes it too.
+ * md未満のナビゲーション。上部バーのメニューボタンで、左からドロワーを開く。ドロワーはモーダルの
+ * <dialog>なので、Escapeで閉じ、フォーカスはボタンへ戻る。ドロワーの外やリンクのクリックでも
+ * 閉じる。
  */
 export function NavigationDrawer({
   labels,
@@ -19,7 +19,7 @@ export function NavigationDrawer({
   children,
 }: {
   labels: NavigationDrawerLabels;
-  /** The top row of the drawer, usually the product logo. */
+  /** ドロワーの一番上の行。たいていは製品のロゴ。 */
   header: ReactNode;
   children: ReactNode;
 }) {
@@ -33,7 +33,7 @@ export function NavigationDrawer({
     if (!isOpen && drawer.open) drawer.close();
   }, [isOpen]);
   const closeOnBackdropOrLink = (event: MouseEvent<HTMLDialogElement>) => {
-    // The panel fills the dialog's box, so a click that hits the dialog itself is on the backdrop.
+    // パネルがダイアログの箱を埋めるので、ダイアログ自身に当たったクリックは背景へのクリック。
     const isBackdrop = event.target === event.currentTarget;
     if (isBackdrop || (event.target as Element).closest('a')) setIsOpen(false);
   };

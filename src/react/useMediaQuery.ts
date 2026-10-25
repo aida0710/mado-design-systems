@@ -3,8 +3,8 @@ import { useCallback, useSyncExternalStore } from 'react';
 const canMatchMedia = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function';
 
 /**
- * Whether the media query matches, rendering again whenever the screen changes. Without matchMedia
- * (server rendering, old test environments) it is false, so the wide layout is the default.
+ * メディアクエリに当てはまるか。画面が変わるたびに描き直す。matchMediaが無い環境（サーバーでの
+ * 描画、古いテスト環境）ではfalseになり、広い画面のレイアウトが既定になる。
  */
 export function useMediaQuery(query: string): boolean {
   const subscribe = useCallback(

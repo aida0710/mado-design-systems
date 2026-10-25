@@ -1,4 +1,4 @@
-/** A format a previewed text can be shown as. */
+/** プレビューするテキストの表示形式。 */
 export type CodeLanguage =
   | 'plaintext'
   | 'json'
@@ -18,28 +18,28 @@ export type CodeLanguage =
 
 export interface CodeLanguageInfo {
   id: CodeLanguage;
-  /** The format's own name. Apps translate 'Text' and 'Log' for their select. */
+  /** 形式そのものの名前。'Text'と'Log'は、アプリが選択欄用に翻訳する。 */
   name: string;
 }
 
-/** The formats a preview can be shown as, in the order of the select. */
+/** プレビューで選べる表示形式。選択欄の並び順。 */
 export declare const CODE_LANGUAGES: readonly CodeLanguageInfo[];
 
-/** Coloring stops here; the rest of a longer text is shown as it is. */
+/** 色付けはここまで。これより長いテキストの残りは、色を付けずにそのまま出す。 */
 export declare const HIGHLIGHT_MAX_CHARS: number;
 
 export declare function isCodeLanguage(value: unknown): value is CodeLanguage;
 
-/** The format the file name tells, or null when it says nothing (no or unknown extension, .txt). */
+/** ファイル名から分かる形式。分からなければ（拡張子が無い・不明・.txt）null。 */
 export declare function languageFromName(fileName: string | null | undefined): CodeLanguage | null;
 
-/** The format the media type tells, or null for text/plain, octet-stream and the like. */
+/** メディアタイプから分かる形式。text/plainやoctet-streamなどではnull。 */
 export declare function languageFromMimeType(mimeType: string | null | undefined): CodeLanguage | null;
 
-/** The format the content looks like, from its first lines; plain text when nothing fits. */
+/** 先頭の数行から見て、中身がどの形式に見えるか。どれにも当てはまらなければプレーンテキスト。 */
 export declare function guessLanguage(text: string): CodeLanguage;
 
-/** The file name decides first, then the media type, then the content. */
+/** ファイル名、メディアタイプ、中身の順に形式を決める。 */
 export declare function detectLanguage(input: {
   fileName?: string | null;
   mimeType?: string | null;
@@ -49,7 +49,7 @@ export declare function detectLanguage(input: {
 export declare function escapeHtml(text: string): string;
 
 /**
- * The text as HTML for <code> inside .code-view: escaped, with spans for the colors. Only the
- * first HIGHLIGHT_MAX_CHARS are colored, so a large preview stays responsive.
+ * .code-viewの中の<code>に入れるHTML。テキストをエスケープし、色ごとにspanで囲む。大きなプレビュー
+ * でも操作が重くならないよう、色を付けるのは先頭のHIGHLIGHT_MAX_CHARS文字だけ。
  */
 export declare function highlightCode(text: string, language: CodeLanguage): string;
