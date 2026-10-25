@@ -99,6 +99,77 @@ button.avatar {
   background: var(--avatar-hover);
   text-decoration: none;
 }
+
+/* ── 上部バーのユーザーメニュー（ReactのUserMenu） ── */
+.user-menu {
+  position: relative;
+}
+.popover.user-menu-popover {
+  top: calc(100% + 8px);
+  z-index: 20;
+  box-shadow: var(--shadow-popover);
+}
+.user-menu-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 14px 12px;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+.user-menu-identity .muted {
+  font-size: var(--font-size-xs);
+}
+.user-menu-popover .menu-item.starts-group {
+  border-top: 1px solid var(--border);
+}
+
+/* ── 製品のロゴ（ReactのProductLogo） ──
+   前のmadoは通常の太さ、製品の部分は上部バーの.brand strongと同じ600。ログイン画面の
+   .login-markは全体が600なので、前の部分だけ通常の太さに戻す。 */
+.product-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.product-prefix {
+  font-weight: 400;
+}
+.navigation-drawer-header strong,
+.login-mark strong {
+  font-weight: 600;
+}
+/* 印は名前の文字（14〜16px）より一回り大きく、線はどの部分も同じ太さ。 */
+.product-mark {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linejoin: miter;
+  stroke-linecap: square;
+}
+.product-mark-base {
+  stroke: currentColor;
+}
+.product-mark-accent {
+  stroke: var(--accent);
+}
+/* 暗い上部バーとドロワーでは、選択中の項目の印と同じ明るい強調色にする。 */
+.brand .product-mark-accent,
+.navigation-drawer-header .product-mark-accent {
+  stroke: var(--header-indicator);
+}
+/* 上部バーのボタンで幅が足りないときは、名前をはみ出させず「…」で縮める。 */
+.brand,
+.brand .product-logo {
+  min-width: 0;
+}
+.brand .product-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .topbar .navigation-toggle {
   align-self: center;
   width: var(--tap-target);

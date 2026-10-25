@@ -9,6 +9,8 @@ mado S3 Data Catalogとmado ML Trackingが共有するデザインシステム�
 | `base.css` | 要素の既定（本文の書体と大きさ、入力欄、リンク、フォーカスの枠、見出し、コード）と小さな補助class（`.muted`・`.mono`・`.sr-only`など） |
 | `components.css` | ボタン（`.button`・`.icon-button`・`.link-button`）、通知（`.notice`）、ページの見出し（`.page-header`）、区切りの見出し（`.section-heading`）、項目と値の一覧（`.details-list`）、JSONの表示（`.json-view`）、タブ（`.tabs`・`.tab`）、入力欄（`.field`）、ダイアログ（`.dialog`）、表、状態バッジ（`.status-badge`と役割の`.status-success`・`.status-info`・`.status-danger`・`.status-neutral`・`.status-attention`・`.status-accent`）、ポップオーバーとメニュー（`.popover`・`.menu`・`.menu-item`）、一覧の上の帯（`.toolbar`・`.toolbar-search`・`.toolbar-item`）、パンくず（`.breadcrumbs`）、狭い幅で列を減らす表（`.responsive-table`）、rechartsの軸の色 |
 | `shell.css` | 上部バー（`.topbar`）、サイドバー（`.navigation-sidebar`）とアイコンだけの列、幅を変える境目、ドロワー（`.navigation-drawer`）、ログイン画面（`.login-page`） |
+| `lineage.css` | 来歴のグラフ（React Flow）の色、項目のカード（`.lineage-node-card`）、検索欄（`.lineage-search-field`）。項目の種類の色は各アプリが`--lineage-kind-color`で決める |
+| `docs.css` | ドキュメントサイト（VitePress）のテーマ。上部バーとサイドバーをアプリと同じ暗い枠にする。`tokens.css`と`fonts.css`の後に読み込む |
 | `code.css` | 暗い地のコード表示（`.code-view`）と表示形式の選択欄（`.code-format`）、`code.js`が付ける色のclass |
 | `code.js`・`code.d.ts` | テキストの形式の推測と色付け（`@mado/design-system/code`）。highlight.jsを使います |
 | `dist/`（`src/`から作る） | 両アプリ共通の処理とReactの部品。下の「共通の処理とReactの部品」を参照 |
@@ -44,6 +46,7 @@ import '@mado/design-system/code.css';
 ダークテーマは`<html data-theme="dark">`のときに有効になります。
 
 - mado ML Tracking: `apps/web`が依存し、`main.tsx`で上の順に読み込みます。
+- ドキュメントサイト（両製品の`pages/`）は`fonts.css`・`tokens.css`・`docs.css`を読み込みます。
 - mado S3 Data Catalog: `front/`が依存します。`base.css`・`components.css`・`shell.css`・`code.css`は、どれも`@layer components`に入れて読み込みます（`@import "@mado/design-system/base.css" layer(components);`）。Tailwind v4のpreflight（`@layer base`）より強く、ユーティリティclassより弱くなり、共通のCSSどうしの優先順位はlayerを使わないmado ML Trackingと同じになります（要素の指定より`.numeric`などのclassが勝つ）。
 
 ### 画面の枠のclassと属性
@@ -81,16 +84,22 @@ const html = highlightCode(text, language);
 | `@mado/design-system/popover` | ボタンの下に開くメニューの置き場所（`placeDropdown`） |
 | `@mado/design-system/locale` | 表示言語（`createLocaleStore({ storageKey })`・`LANGUAGES`）。保存した言語 → ブラウザの優先言語 → 英語の順に決め、別のタブの変更も受け取ります |
 | `@mado/design-system/theme` | ライト・ダーク（`initialTheme`・`saveTheme`・`readDocumentTheme`） |
-| `@mado/design-system/format` | バイト数（`formatBytes`、1024で割ってKiB・MiB）と経過時間（`formatRelativeTime`）。表示言語のIntlの言語（`ja-JP`など）を渡します |
+| `@mado/design-system/format` | バイト数（`formatBytes`、1024で割ってKiB・MiB）、経過時間（`formatRelativeTime`）、名前の頭文字（`initialsOf`）。表示言語のIntlの言語（`ja-JP`など）を渡します |
+| `@mado/design-system/datetime-input` | `<input type="datetime-local">`の値と日時の変換（`formatLocalDateTimeInput`・`parseLocalDateTimeInput`）。あり得ない日時を弾きます |
+| `@mado/design-system/token-expiry` | アクセストークンの期限の選び方（7・30・90・365日、無期限、分・時間・日での入力、カレンダー。既定は90日） |
+| `@mado/design-system/list-navigation` | メニューや候補の一覧での矢印キー・Home・Endの移動先（`moveActiveIndex`） |
 | `@mado/design-system/clipboard` | `copyText`。HTTPのLANでも、モーダルのダイアログの中でもコピーでき、失敗すると`false`を返します |
 | `@mado/design-system/monaco` | `tokens.css`の色でMonacoのテーマを定義する`defineMonacoTheme(monaco.editor, theme)`と`monacoFontFamily` |
-| `@mado/design-system/react` | `Dialog`、`LanguagePicker`、`LoginHeader`、`NavigationSidebar`、`NavigationDrawer`、`NavigationResizeHandle`と、`useMediaQuery`・`useAnchoredPopover`・`useTheme`・`useDocumentTheme`・`useLocale`・`useNavigationLayout`・`useModalDialog`・`useCodeLanguage` |
+| `@mado/design-system/react` | `Dialog`、`LanguagePicker`、`LoginHeader`、`ProductLogo`、`UserMenu`、`NavigationSidebar`、`NavigationDrawer`、`NavigationResizeHandle`、`ErrorNotice`・`LoadingMessage`・`EmptyMessage`と、`useMediaQuery`・`useAnchoredPopover`・`usePopover`・`useTheme`・`useDocumentTheme`・`useLocale`・`useNavigationLayout`・`useModalDialog`・`useCodeLanguage`・`useQuery` |
 
 Reactの部品を使うアプリは、`react`・`react-dom`（19.2以上）と`lucide-react`（0.577）を自分の依存に入れます。どれも省略できるpeer dependencyで、CSSだけを使うアプリには要りません。
 
 - `Dialog`はブラウザの`<dialog>`をモーダルで開きます。開いている間だけ描きます（`{open && <Dialog … />}`）。最初の入力欄へフォーカスを移し（タッチ画面ではダイアログ自体）、閉じたら開いたボタンへ戻します。`dismissible={false}`の間はEscapeでも閉じません。背景のクリックで閉じるのは`closesOnBackdropClick`を付けたときだけです（入力の途中で誤って閉じないように）。
 - `NavigationSidebar`のリンクは`renderLinks`でアプリが描きます。アイコンだけの列のときは`showsTitles`が`true`になるので、リンクに`title`を付けます。
 - `LanguagePicker`には、アプリが`createLocaleStore`で作ったものを渡します。
+- `ProductLogo`の印は製品ごとの`<svg className="product-mark">`をアプリが渡します。強調色の線に`product-mark-accent`、文字色の線に`product-mark-base`を付けます。線の太さはどの製品も1.75です。
+- `UserMenu`の項目のリンクは既定で`<a>`です。react-routerを使うアプリは`renderLink`で`Link`を描きます。
+- `useQuery`の`error`は投げられたものをそのまま返します。文言にするのはアプリです（APIのエラーの形がアプリごとに違うため）。
 
 ## 変数と部品を足す・変えるときの決まり
 

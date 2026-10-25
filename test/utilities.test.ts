@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { formatBytes, formatRelativeTime } from '../src/format';
+import { parseLocalDateTimeInput } from '../src/datetimeInput';
+import { formatBytes, formatRelativeTime, initialsOf } from '../src/format';
 import { clampNavigationWidth, narrowerThan, NAVIGATION_WIDTH, storedNavigationWidth } from '../src/layout';
 import { placeDropdown } from '../src/popover';
+import { changeTokenExpiryOption, DEFAULT_TOKEN_EXPIRY_SELECTION, resolveTokenExpiryTimestamp } from '../src/tokenExpiry';
 
 describe('layout', () => {
   it('切り替え幅は範囲の書き方のメディアクエリになる', () => {
@@ -69,5 +71,39 @@ describe('formatRelativeTime', () => {
 
   it('少し進んだ時計の時刻は今として扱う', () => {
     expect(formatRelativeTime('2026-10-26T12:00:30Z', { intlLocale: 'en-US', now })).toBe('now');
+  });
+});
+
+describe('initialsOf', () => {
+  it('二語以上なら各語の頭、一語なら先頭の二文字', () => {
+    expect(initialsOf('Masaki Aida')).toBe('MA');
+    expect(initialsOf('admin')).toBe('AD');
+    expect(initialsOf('  ')).toBe('');
+  });
+});
+
+describe('token expiry', () => {
+  const now = Date.parse('2026-10-26T00:00:00Z');
+
+  it('決まった日数・無期限・自分で入れた長さを期限の日時にする', () => {
+    expect(resolveTokenExpiryTimestamp({ ...DEFAULT_TOKEN_EXPIRY_SELECTION, option: '7' }, now)).toBe(
+      '2026-11-02T00:00:00.000Z',
+    );
+    expect(resolveTokenExpiryTimestamp({ ...DEFAULT_TOKEN_EXPIRY_SELECTION, option: 'never' }, now)).toBeNull();
+    expect(
+      resolveTokenExpiryTimestamp({ option: 'custom', duration: '1.5', unit: 'hours', dateTime: '' }, now),
+    ).toBe('2026-10-26T01:30:00.000Z');
+    expect(resolveTokenExpiryTimestamp({ option: 'custom', duration: '0', unit: 'days', dateTime: '' }, now)).toBe(
+      undefined,
+    );
+  });
+
+  it('カレンダーに替えると、それまでの長さの日時を初期値にする', () => {
+    const changed = changeTokenExpiryOption({ ...DEFAULT_TOKEN_EXPIRY_SELECTION, option: '30' }, 'calendar', now);
+    expect(parseLocalDateTimeInput(changed.dateTime)?.getTime()).toBe(Date.parse('2026-11-25T00:00:00Z'));
+  });
+
+  it('あり得ない日時は読まない', () => {
+    expect(parseLocalDateTimeInput('2026-02-30T10:00')).toBeUndefined();
   });
 });

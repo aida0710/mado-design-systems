@@ -18,6 +18,8 @@
     "components.css",
     "shell.css",
     "code.css",
+    "lineage.css",
+    "docs.css",
     "code.js",
     "code.d.ts",
     "dist",
@@ -31,6 +33,8 @@
     "./components.css": "./components.css",
     "./shell.css": "./shell.css",
     "./code.css": "./code.css",
+    "./lineage.css": "./lineage.css",
+    "./docs.css": "./docs.css",
     "./code": {
       "types": "./code.d.ts",
       "default": "./code.js"
@@ -54,6 +58,18 @@
     "./format": {
       "types": "./dist/format.d.ts",
       "default": "./dist/format.js"
+    },
+    "./datetime-input": {
+      "types": "./dist/datetimeInput.d.ts",
+      "default": "./dist/datetimeInput.js"
+    },
+    "./token-expiry": {
+      "types": "./dist/tokenExpiry.d.ts",
+      "default": "./dist/tokenExpiry.js"
+    },
+    "./list-navigation": {
+      "types": "./dist/listNavigation.d.ts",
+      "default": "./dist/listNavigation.js"
     },
     "./clipboard": {
       "types": "./dist/clipboard.d.ts",

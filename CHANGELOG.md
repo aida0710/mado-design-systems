@@ -10,7 +10,10 @@
 - 部品を足しました。注意の通知（`.notice.warning`）、メニュー（`.popover.menu`・`.menu-item`・`.menu-separator`）、`useAnchoredPopover`で置くポップオーバー（`.popover.anchored-popover`）、一覧の上の帯（`.toolbar`・`.toolbar-search`・`.toolbar-item`）、パンくずの入れ物（`.breadcrumbs`）、ダイアログの見出しの補足（`.dialog-heading`）と幅`.dialog.extra-wide`、表示言語のボタン（`.language-picker`）、rechartsの軸の色です。
 - 狭い画面の`.touch-targets`で、表と`.eyebrow`の中のリンク、ボタンの形でない`summary`のタップ領域を広げます。
 - 両アプリにあった同じ処理とReactの部品を移しました（`@mado/design-system/layout`・`popover`・`locale`・`theme`・`format`・`clipboard`・`monaco`・`react`）。保存キーと表示の文言は引数で受け取ります。Reactの部品を使うアプリは`react`・`react-dom`・`lucide-react`を自分の依存に入れます。
+- ユーザーメニュー（`UserMenu`、`.user-menu`）、製品のロゴ（`ProductLogo`、`.product-logo`・`.product-mark-base`・`.product-mark-accent`。線の太さは1.75）、読み込み中・失敗・空の表示、データの読み込み（`useQuery`）、アクセストークンの期限の選び方、`datetime-local`の値の変換を足しました。
+- 来歴のグラフの`lineage.css`と、ドキュメントサイトのテーマの`docs.css`を足しました。
 - `src/`のTypeScriptを`npm pack`の前に`dist/`へ書き出すようにしました。
+- コードのコメントを日本語にしました。
 
 ## 0.5.2
 
