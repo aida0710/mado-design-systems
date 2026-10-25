@@ -1,8 +1,8 @@
 {
   "name": "@mado/design-system",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "private": true,
-  "description": "MadoとMado Model Trackingが共有するデザインシステム。色・書体・角丸の変数、要素の既定、部品、画面の枠、テキストの色付けとIBM Plexの書体ファイル",
+  "description": "mado S3 Data Catalogとmado ML Trackingが共有するデザインシステム。色・書体・角丸・文字の大きさの変数、要素の既定、部品、画面の枠、テキストの色付けとIBM Plexの書体ファイルに加え、両アプリ共通の処理（画面幅・表示言語・テーマ・書式・クリップボード・Monacoの配色）とReactの部品",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -18,8 +18,11 @@
     "components.css",
     "shell.css",
     "code.css",
+    "lineage.css",
+    "docs.css",
     "code.js",
     "code.d.ts",
+    "dist",
     "fonts",
     "CHANGELOG.md"
   ],
@@ -30,9 +33,55 @@
     "./components.css": "./components.css",
     "./shell.css": "./shell.css",
     "./code.css": "./code.css",
+    "./lineage.css": "./lineage.css",
+    "./docs.css": "./docs.css",
     "./code": {
       "types": "./code.d.ts",
       "default": "./code.js"
+    },
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "default": "./dist/layout.js"
+    },
+    "./popover": {
+      "types": "./dist/popover.d.ts",
+      "default": "./dist/popover.js"
+    },
+    "./locale": {
+      "types": "./dist/locale.d.ts",
+      "default": "./dist/locale.js"
+    },
+    "./theme": {
+      "types": "./dist/theme.d.ts",
+      "default": "./dist/theme.js"
+    },
+    "./format": {
+      "types": "./dist/format.d.ts",
+      "default": "./dist/format.js"
+    },
+    "./datetime-input": {
+      "types": "./dist/datetimeInput.d.ts",
+      "default": "./dist/datetimeInput.js"
+    },
+    "./token-expiry": {
+      "types": "./dist/tokenExpiry.d.ts",
+      "default": "./dist/tokenExpiry.js"
+    },
+    "./list-navigation": {
+      "types": "./dist/listNavigation.d.ts",
+      "default": "./dist/listNavigation.js"
+    },
+    "./clipboard": {
+      "types": "./dist/clipboard.d.ts",
+      "default": "./dist/clipboard.js"
+    },
+    "./monaco": {
+      "types": "./dist/monaco.d.ts",
+      "default": "./dist/monaco.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -41,18 +90,40 @@
     "./code.js"
   ],
   "scripts": {
-    "test": "vitest run"
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "npm run build",
+    "test": "npm run build && vitest run"
   },
   "peerDependencies": {
-    "highlight.js": "^11.11.0"
+    "highlight.js": "^11.11.0",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "peerDependenciesMeta": {
     "highlight.js": {
       "optional": true
+    },
+    "lucide-react": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
     }
   },
   "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.3.0",
     "highlight.js": "^11.12.0",
-    "vitest": "^4.1.5"
+    "jsdom": "^27.4.0",
+    "lucide-react": "^0.577.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.5"
   }
 }

@@ -1,13 +1,13 @@
 /*
- * The app frame shared by Mado and Mado Model Tracking: the header, the navigation sidebar (full,
- * or a rail of icons), the drawer that holds the navigation on narrow screens, and the login card.
- * Needs tokens.css, base.css and components.css.
+ * mado S3 Data Catalogとmado ML Trackingが共有するアプリの枠。上部バー、ナビゲーションのサイドバー
+ * （通常の幅か、アイコンだけのレール）、狭い画面でナビゲーションを収めるドロワー、ログインのカード。
+ * tokens.css、base.css、components.cssが必要。
  *
- * Markup: .app-shell[data-navigation="sidebar|rail|drawer"] > .topbar + .app-body
+ * マークアップ: .app-shell[data-navigation="sidebar|rail|drawer"] > .topbar + .app-body
  *   .app-body > .navigation-sidebar[data-collapsed] + .app-content
- * The app chooses data-navigation from the width (1200px and up: sidebar, which the user may
- * collapse into the rail; 900px up to 1200px: rail; below 900px: drawer) and may set
- * --navigation-width on .app-shell after the user resizes the sidebar.
+ * data-navigationはアプリが画面幅から選ぶ（1200px以上: sidebar。利用者はレールに折りたためる。
+ * 900px以上1200px未満: rail。900px未満: drawer）。利用者がサイドバーの幅を変えたら、アプリは
+ * .app-shellに--navigation-widthを設定してよい。
  */
 :root {
   --topbar-height: 49px;
@@ -27,9 +27,9 @@
   top: 10px;
 }
 
-/* ── Header ──────────────────────────────────────────────────────────── */
-/* The header stays at the top while the screen scrolls, so the sidebar below it always fills the
-   rest of the window. Scrolling to an anchor or a focused field leaves room for the header. */
+/* ── 上部バー ────────────────────────────────────────────────────────── */
+/* 上部バーは画面をスクロールしても上端に残り、その下のサイドバーが常にウィンドウの残りを埋める。
+   アンカーやフォーカスした入力欄へスクロールするときは、上部バーの分の余白を空ける。 */
 html {
   scroll-padding-top: var(--topbar-height);
 }
@@ -50,10 +50,11 @@ html {
   padding: 0 18px;
   color: var(--header-text);
   white-space: nowrap;
-  font-size: 14px;
+  font-size: var(--font-size-md);
   gap: 5px;
 }
-/* Beside the full sidebar the app name spans the same width, so the screen starts below its edge. */
+/* 通常のサイドバーの横では、アプリ名の欄もサイドバーと同じ幅にし、画面の本体がその端の真下から
+   始まるようにする。 */
 .app-shell[data-navigation='sidebar'] .brand {
   min-width: var(--navigation-width);
 }
@@ -83,7 +84,7 @@ html {
   background: var(--avatar);
   display: grid;
   place-items: center;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 650;
   color: var(--on-accent);
 }
@@ -98,6 +99,77 @@ button.avatar {
   background: var(--avatar-hover);
   text-decoration: none;
 }
+
+/* ── 上部バーのユーザーメニュー（ReactのUserMenu） ── */
+.user-menu {
+  position: relative;
+}
+.popover.user-menu-popover {
+  top: calc(100% + 8px);
+  z-index: 20;
+  box-shadow: var(--shadow-popover);
+}
+.user-menu-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 14px 12px;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+.user-menu-identity .muted {
+  font-size: var(--font-size-xs);
+}
+.user-menu-popover .menu-item.starts-group {
+  border-top: 1px solid var(--border);
+}
+
+/* ── 製品のロゴ（ReactのProductLogo） ──
+   前のmadoは通常の太さ、製品の部分は上部バーの.brand strongと同じ600。ログイン画面の
+   .login-markは全体が600なので、前の部分だけ通常の太さに戻す。 */
+.product-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.product-prefix {
+  font-weight: 400;
+}
+.navigation-drawer-header strong,
+.login-mark strong {
+  font-weight: 600;
+}
+/* 印は名前の文字（14〜16px）より一回り大きく、線はどの部分も同じ太さ。 */
+.product-mark {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linejoin: miter;
+  stroke-linecap: square;
+}
+.product-mark-base {
+  stroke: currentColor;
+}
+.product-mark-accent {
+  stroke: var(--accent);
+}
+/* 暗い上部バーとドロワーでは、選択中の項目の印と同じ明るい強調色にする。 */
+.brand .product-mark-accent,
+.navigation-drawer-header .product-mark-accent {
+  stroke: var(--header-indicator);
+}
+/* 上部バーのボタンで幅が足りないときは、名前をはみ出させず「…」で縮める。 */
+.brand,
+.brand .product-logo {
+  min-width: 0;
+}
+.brand .product-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .topbar .navigation-toggle {
   align-self: center;
   width: var(--tap-target);
@@ -105,9 +177,9 @@ button.avatar {
   margin-left: 6px;
 }
 
-/* ── Below the header: the navigation sidebar, then the screen ────────── */
-/* The sidebar and the drawer take the header's colours in both themes, so the header and the
-   navigation read as one dark frame around the screen. The links below are drawn for that frame. */
+/* ── 上部バーの下: ナビゲーションのサイドバー、続いて画面 ─────────────── */
+/* サイドバーとドロワーはどちらのテーマでも上部バーの色を使い、上部バーとナビゲーションが画面を
+   囲むひと続きの暗い枠に見えるようにする。下のリンクの見た目は、その枠に合わせて描く。 */
 .app-body {
   display: flex;
   align-items: flex-start;
@@ -124,8 +196,8 @@ button.avatar {
   flex-direction: column;
   width: var(--navigation-width);
   height: calc(100vh - var(--topbar-height));
-  /* The sidebar and the header share a colour; the line on top keeps the header's edge, as the
-     line under the drawer's header does. */
+  /* サイドバーと上部バーは同じ色なので、上端の線で上部バーとの境目を残す。ドロワーの見出しの下の
+     線と同じ役目。 */
   border-top: 1px solid var(--header-border);
   border-right: 1px solid var(--header-border);
   background: var(--header);
@@ -152,7 +224,7 @@ button.avatar {
 .navigation-group-label {
   padding: 14px 16px 4px;
   color: var(--header-text-muted);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -192,12 +264,12 @@ button.avatar {
 .navigation-link[aria-current='page'] > svg {
   color: var(--header-indicator);
 }
-/* The brand teal of the light theme is too dark on the frame; the focus mark uses the header's. */
+/* ライトテーマのブランド色の青緑は枠の上では暗すぎるので、フォーカスの印には上部バーのものを使う。 */
 .navigation-sidebar :focus-visible,
 .navigation-drawer :focus-visible {
   outline-color: var(--header-indicator);
 }
-/* The rail keeps the icons; the names stay readable to screen readers and show as tooltips. */
+/* レールではアイコンだけを残す。名前はスクリーンリーダーで読み上げられ、ツールチップにも出る。 */
 .navigation-sidebar[data-collapsed='true'] .navigation-group-label {
   display: none;
 }
@@ -235,7 +307,7 @@ button.avatar {
 .navigation-sidebar[data-collapsed='true'] .navigation-sidebar-footer {
   justify-content: center;
 }
-/* Dragging the right edge of the full sidebar changes its width. */
+/* 通常のサイドバーの右端をドラッグすると幅が変わる。 */
 .navigation-resize-handle {
   position: absolute;
   top: 0;
@@ -263,7 +335,7 @@ button.avatar {
   outline: none;
 }
 
-/* ── The drawer that holds the navigation below 900px ────────────────── */
+/* ── 900px未満でナビゲーションを収めるドロワー ───────────────────────── */
 .navigation-drawer {
   position: fixed;
   inset: 0 auto 0 0;
@@ -300,7 +372,7 @@ button.avatar {
   justify-content: space-between;
   min-height: var(--topbar-height);
   padding: 0 6px 0 18px;
-  font-size: 14px;
+  font-size: var(--font-size-md);
   border-bottom: 1px solid var(--header-border);
 }
 .navigation-drawer-header .icon-button {
@@ -325,8 +397,8 @@ button.avatar {
   padding: 0 18px 0 15px;
 }
 
-/* ── Login ───────────────────────────────────────────────────────────── */
-/* The login card: the app name, what it is, the title, then the ways to sign in. */
+/* ── ログイン ────────────────────────────────────────────────────────── */
+/* ログインのカード。アプリ名、その説明、タイトル、続いてログインの方法。 */
 .login-page {
   min-height: 100vh;
   display: grid;
@@ -342,11 +414,11 @@ button.avatar {
   background: var(--background);
 }
 .login-mark {
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   line-height: 1;
 }
-/* An 8px gap keeps the brand and a full touch target together on a 320px screen. */
+/* 間隔を8pxにすると、320pxの画面でも製品名とタップに十分な大きさのボタンが並んで収まる。 */
 .login-header {
   display: flex;
   align-items: center;
@@ -356,10 +428,14 @@ button.avatar {
 .login-header > :last-child {
   flex: none;
 }
+/* 表示言語のメニューボタン。メニューの位置はuseAnchoredPopoverが決める。 */
+.language-picker {
+  position: relative;
+}
 .login-eyebrow {
   margin: 20px 0 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
 }
 .login-mark + h1 {
@@ -380,7 +456,7 @@ button.avatar {
   gap: 12px;
   margin: 22px 0;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
 }
 .login-or::before,
 .login-or::after {
@@ -390,14 +466,14 @@ button.avatar {
   background: var(--border);
 }
 
-/* ── Widths ──────────────────────────────────────────────────────────── */
+/* ── 画面幅 ──────────────────────────────────────────────────────────── */
 @media (width < 1200px) {
   .brand {
     padding: 0 12px;
   }
 }
 @media (width < 900px) {
-  /* The 27px avatar keeps its look inside a full tap target: the header-coloured border pads it. */
+  /* 27pxの丸いアバターは、タップに十分な大きさにしても見た目を保つ。上部バーと同じ色の枠線で周りを埋める。 */
   .topbar .avatar {
     width: var(--tap-target);
     height: var(--tap-target);

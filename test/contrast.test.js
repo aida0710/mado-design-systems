@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-// The contrast rules of tokens.css (WCAG AA): text 4.5:1 on every surface it sits on, focus marks
-// and field borders 3:1. Each pair is checked in both themes.
+// tokens.cssのコントラストの決まり（WCAG AA）。文字は載るどの面に対しても4.5:1、フォーカスの印と
+// 入力欄の枠線は3:1。どの組も両方のテーマで確かめる。
 const tokens = readFileSync(new URL('../tokens.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 const block = (selector) => {
   const start = tokens.indexOf(`${selector} {`);
@@ -39,12 +39,12 @@ const pairs = [
   ['--success', '--success-tint', 4.5],
   ['--on-accent', '--accent-strong', 4.5],
   ['--on-error-fill', '--error-fill', 4.5],
-  ...['success', 'info', 'danger', 'neutral', 'attention', 'stopped'].map((kind) => [
+  ...['success', 'info', 'danger', 'neutral', 'attention'].map((kind) => [
     `--status-${kind}-text`,
     `--status-${kind}-background`,
     4.5,
   ]),
-  ...['--header-text', '--header-text-muted', '--header-text-strong', '--header-alert'].flatMap((text) =>
+  ...['--header-text', '--header-text-muted', '--header-text-strong'].flatMap((text) =>
     ['--header', '--header-hover', '--header-active'].map((surface) => [text, surface, 4.5]),
   ),
   ...[

@@ -1,37 +1,37 @@
 /*
- * Design tokens shared by Mado and Mado Model Tracking: theme colors, type, and corner shapes.
- * Apps read them as custom properties and keep their own layout values (widths, paddings).
- * Text colors keep 4.5:1 against every surface they sit on (WCAG AA); lines and indicators keep 3:1.
- * The dark theme applies while the root element has data-theme="dark".
+ * mado S3 Data Catalogとmado ML Trackingが共有するデザイントークン。テーマの色、文字、角の形。
+ * アプリはカスタムプロパティとして読み、レイアウトの値（幅や余白）は各アプリが持つ。
+ * 文字色は、載るどの面に対しても4.5:1を保つ（WCAG AA）。線と印は3:1を保つ。
+ * ダークテーマは、ルート要素にdata-theme="dark"がある間に効く。
  */
 :root {
   color-scheme: light;
 
-  /* Surfaces, from the page to pressed and selected states. */
+  /* 面。ページの地から、押した状態・選択中の状態まで。 */
   --background: #fff;
   --surface: #f4f4f4;
   --surface-hover: #eaeaea;
   --table-header: #e4e4e4;
   --selected: #dedede;
 
-  /* Text. --muted and --link keep 4.5:1 on --selected, the darkest surface. */
+  /* 文字。--mutedと--linkは、いちばん濃い面の--selectedの上でも4.5:1を保つ。 */
   --text: #202020;
   --muted: #5f6367;
   --link: #006e6a;
 
-  /* Lines: --border divides areas, --border-strong frames quiet controls, --input-border outlines fields. */
+  /* 線。--borderは領域を区切り、--border-strongは控えめな操作部品を囲み、--input-borderは入力欄の枠を描く。 */
   --border: #dedede;
   --border-strong: #c6c6c6;
   --input-border: #8a8a8a;
 
-  /* Brand teal for state marks (focus, active tab, selected item). Text in the brand color uses --link. */
+  /* 状態の印（フォーカス、開いているタブ、選択中の項目）に使うブランド色の青緑。ブランド色の
+     文字には--linkを使う。 */
   --accent: #008682;
   --accent-strong: #007b77;
   --accent-tint: #e2f3f1;
   --on-accent: #fff;
-  --on-accent-hover: rgb(255 255 255 / 8%);
 
-  /* Feedback. --error-fill carries white text; --warning only marks borders. */
+  /* フィードバック。--error-fillは白い文字を載せる地。--warningは枠線の印にだけ使う。 */
   --error: #ba2737;
   --error-tint: #fff0f1;
   --error-fill: #ba2737;
@@ -40,7 +40,7 @@
   --success-tint: #eaf8ed;
   --warning: #c58a00;
 
-  /* Status badges: text and background in pairs. */
+  /* 状態バッジ。文字と背景を組で持つ。 */
   --status-success-text: #075b23;
   --status-success-background: #abefbf;
   --status-info-text: #1547ac;
@@ -51,10 +51,8 @@
   --status-neutral-background: #e3e5e8;
   --status-attention-text: #6b4500;
   --status-attention-background: #fde7b0;
-  --status-stopped-text: #8a5300;
-  --status-stopped-background: #fde7c4;
 
-  /* The header stays dark in both themes. */
+  /* 上部バーはどちらのテーマでも暗いまま。 */
   --header: #151515;
   --header-text: #efefef;
   --header-text-muted: #ddd;
@@ -64,18 +62,17 @@
   --header-control-hover: #333;
   --header-border: #333;
   --header-indicator: #00b9b1;
-  --header-alert: #ffb4bc;
   --avatar: #007b77;
   --avatar-hover: #006e6a;
 
-  /* Logs, terminal output and file previews (code.css) stay dark in both themes. */
+  /* ログ、ターミナルの出力、ファイルのプレビュー（code.css）は、どちらのテーマでも暗いまま。 */
   --code-background: #13171b;
   --code-text: #d8e1e5;
   --code-muted: #788c95;
   --code-error: #ff9ca7;
   --code-warning: #efcf8e;
-  /* Syntax colors on --code-background, each at least 4.5:1. The dark theme keeps them, since the
-     background does not change. */
+  /* --code-backgroundの上に載せる構文の色。どれも4.5:1以上。背景が変わらないので、ダークテーマでも
+     同じ色のまま。 */
   --code-property: #9cdcfe;
   --code-string: #ce9178;
   --code-number: #b5cea8;
@@ -86,36 +83,38 @@
   --code-heading: #4fc1ff;
   --code-meta: #d7ba7d;
 
-  /* Data marks other than series colors. */
-  --chart-positive: #2a78d6;
-  --chart-negative: #d03b3b;
-  --chart-missing: #9a9a96;
+  /* 来歴のグラフのノードの種類。両アプリの来歴の画面で使う。 */
   --lineage-model: #7991cf;
   --lineage-dataset: #b79854;
 
-  /* Overlays and elevation. */
+  /* オーバーレイと、浮き上がりを示す影。 */
   --backdrop: rgb(0 0 0 / 53%);
-  --media-label-background: rgb(0 0 0 / 55%);
-  --media-label-text: #fff;
   --shadow-menu: 0 4px 18px rgb(0 0 0 / 20%);
   --shadow-popover: 0 8px 24px rgb(0 0 0 / 20%);
   --shadow-dialog: 0 12px 50px rgb(0 0 0 / 33%);
   --shadow-drawer: 4px 0 30px rgb(0 0 0 / 40%);
-  --shadow-drag: 0 6px 18px rgb(0 0 0 / 18%);
 
-  /* Corners: square controls, slightly rounded small pieces, and pills. Circles use 50%. */
+  /* 角。操作部品は四角、小さな部品はわずかに丸め、ほかにピル型。円は50%を使う。 */
   --radius-none: 0;
   --radius-sm: 4px;
   --radius-pill: 999px;
 
-  /* Type. IBM Plex (fonts.css) covers Latin; each app bundles Noto Sans JP for Japanese. */
+  /* 書体。ラテン文字はIBM Plex（fonts.css）、日本語は各アプリが同梱するNoto Sans JP。 */
   --font:
     'IBM Plex Sans', 'Noto Sans JP', 'Noto Sans CJK JP', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   --mono: 'IBM Plex Mono', 'Noto Sans JP', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  /* 文字の大きさ。--font-size-baseは本文。それより小さい段は表の細部・説明文・バッジに、大きい段は
+     見出しに使う。 */
+  --font-size-2xs: 10px;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
   --font-size-base: 13px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
 
-  /* The smallest size of anything tapped on a narrow (touch) screen. */
+  /* 狭い（タッチ）画面でタップするものの最小の大きさ。 */
   --tap-target: 40px;
 }
 
@@ -156,6 +155,4 @@
   --status-neutral-background: #3c4149;
   --status-attention-text: #ffd98a;
   --status-attention-background: #5a4413;
-  --status-stopped-text: #f6cf8e;
-  --status-stopped-background: #5a4220;
 }

@@ -10,7 +10,7 @@ import {
   languageFromName,
 } from '../code.js';
 
-// The format detection and coloring that Mado and Mado Model Tracking share (code.js).
+// mado S3 Data Catalogとmado ML Trackingが共有する、形式の判定と色付け（code.js）。
 describe('code language', () => {
   it('ファイル名の拡張子と特別な名前から形式を決め、言えないときは null', () => {
     expect(languageFromName('runs/metrics.jsonl')).toBe('json');
@@ -110,7 +110,7 @@ describe('code language', () => {
     const html = highlightCode(text, 'plaintext');
     expect(html.endsWith('&lt;tail&gt;')).toBe(true);
     expect(highlightCode(`${'1,'.repeat(HIGHLIGHT_MAX_CHARS / 2)}<x>`, 'csv').endsWith('&lt;x&gt;')).toBe(true);
-    // A line break within the limit ends the colored part, so no line is colored only halfway.
+    // 上限内の改行で色付けを終えるので、行の途中までしか色が付かないことは無い。
     const lines = `a,b\n${'c'.repeat(HIGHLIGHT_MAX_CHARS)}`;
     expect(highlightCode(lines, 'csv')).toBe(
       `<span class="code-column-0">a</span>,<span class="code-column-1">b</span>\n${'c'.repeat(HIGHLIGHT_MAX_CHARS)}`,

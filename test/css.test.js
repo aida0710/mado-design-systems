@@ -1,12 +1,14 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-// The rules of README.md for the stylesheets: colors only as tokens, every variable defined here,
-// the dark theme overriding light values only, and the three widths both apps switch at.
+// README.mdに書いたスタイルシートの決まり。色は変数だけで書く、使う変数はすべてここで定義する、
+// ダークテーマはライトの値を上書きするだけ、両アプリが切り替える3つの幅。
 const root = new URL('../', import.meta.url);
 const read = (name) => readFileSync(new URL(name, root), 'utf8');
 const withoutComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
-const stylesheetNames = ['tokens.css', 'fonts.css', 'base.css', 'components.css', 'shell.css', 'code.css'];
+const stylesheetNames = ['tokens.css', 'fonts.css', 'base.css', 'components.css', 'shell.css', 'code.css', 'lineage.css', 'docs.css'];
+// ドキュメントサイトはVitePressの切り替え幅に合わせるので、アプリの3つの幅の決まりから外す。
+const appStylesheetNames = stylesheetNames.filter((name) => name !== 'docs.css');
 const stylesheets = stylesheetNames.map((name) => ({ name, css: withoutComments(read(name)) }));
 const packageJson = JSON.parse(read('package.json'));
 
@@ -62,7 +64,9 @@ describe('stylesheets', () => {
       '(width < 1200px)',
       '(prefers-reduced-motion: reduce)',
     ]);
-    const queries = stylesheets.flatMap(({ name, css }) =>
+    const queries = stylesheets
+      .filter(({ name }) => appStylesheetNames.includes(name))
+      .flatMap(({ name, css }) =>
       [...css.matchAll(/@media\s+([^{]+)\{/g)].map((match) => ({ name, query: match[1].trim() })),
     );
     expect(queries.length).toBeGreaterThan(0);

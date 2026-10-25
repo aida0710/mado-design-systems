@@ -1,7 +1,7 @@
-# Publishes the version in package.json. When main gets a version that has no GitHub Release yet,
-# the tests run, npm pack makes the tarball, and the release v<version> (and its tag) is created
-# with the tarball attached; the apps depend on that tarball's URL. The job that runs npm keeps a
-# read-only token, and only the job that creates the release, without running npm, may write.
+# package.jsonの版を公開する。まだGitHub Releaseの無い版がmainに入ると、テストを実行し、npm packで
+# tarballを作り、そのtarballを添付したリリースv<version>（とそのタグ）を作る。アプリはそのtarballの
+# URLに依存する。npmを実行するジョブは読み取り専用のトークンのままにし、npmを実行せずにリリースを
+# 作るジョブだけが書き込める。
 name: Release
 
 on:
