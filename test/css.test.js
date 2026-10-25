@@ -57,6 +57,17 @@ describe('stylesheets', () => {
     expect(dark.filter((property) => !light.has(property))).toEqual([]);
   });
 
+  it('fontの一括指定より前に書いた行の高さ・文字の大きさは無い（一括指定が既定に戻すため）', () => {
+    const offending = stylesheets.flatMap(({ name, css }) =>
+      [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].flatMap(([, selector, body]) => {
+        const fontAt = body.search(/(^|[;\s])font\s*:/);
+        const overridden = body.slice(0, Math.max(fontAt, 0)).match(/(line-height|font-size)\s*:/);
+        return fontAt >= 0 && overridden ? [`${name}: ${selector.trim()}: ${overridden[1]}`] : [];
+      }),
+    );
+    expect(offending).toEqual([]);
+  });
+
   it('メディアクエリは 640・900・1200px の範囲の書き方と prefers-reduced-motion だけ', () => {
     const allowed = new Set([
       '(width < 640px)',

@@ -518,14 +518,15 @@ tr.selected td {
   display: flex;
   align-items: center;
   gap: 8px;
-  /* 各言語の名前をその言語の書体で描く表示言語のメニューでも、行の高さをそろえる。 */
-  line-height: 1.5;
   width: 100%;
   padding: 8px 14px;
   border: 0;
   background: transparent;
   color: var(--text);
   font: inherit;
+  /* 各言語の名前をその言語の書体で描く表示言語のメニューでも、行の高さをそろえる。fontの一括指定が
+     line-heightを既定に戻すので、その後に書く。 */
+  line-height: 1.5;
   font-size: var(--font-size-base);
   text-align: left;
   text-decoration: none;
