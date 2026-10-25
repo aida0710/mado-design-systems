@@ -504,6 +504,8 @@ tr.selected td {
 /* useAnchoredPopoverでボタンに合わせて置くポップオーバー。position: fixedで、位置はhookが決める。 */
 .popover.anchored-popover {
   position: fixed;
+  top: auto;
+  bottom: auto;
   margin: 0;
   right: auto;
   min-width: 0;
@@ -516,6 +518,8 @@ tr.selected td {
   display: flex;
   align-items: center;
   gap: 8px;
+  /* 各言語の名前をその言語の書体で描く表示言語のメニューでも、行の高さをそろえる。 */
+  line-height: 1.5;
   width: 100%;
   padding: 8px 14px;
   border: 0;
@@ -535,16 +539,18 @@ tr.selected td {
 .menu-item:focus-visible {
   outline-offset: -2px;
 }
-.menu-item:disabled {
-  color: var(--muted);
-  cursor: default;
-}
+
 .menu-item[aria-checked='false'] {
   /* チェック済みの項目は先頭にチェックの印（15pxと間隔）があるので、その項目と頭をそろえる。 */
   padding-left: calc(14px + 15px + 8px);
 }
 .menu-item.danger {
   color: var(--error);
+}
+/* 危険な操作でも、押せない間は押せない色にする（.dangerより後に書く）。 */
+.menu-item:disabled {
+  color: var(--muted);
+  cursor: default;
 }
 .menu-separator {
   height: 1px;
@@ -613,6 +619,33 @@ tr.selected td {
   padding: 6px 12px;
   border-left: 1px solid var(--background);
   font-size: var(--font-size-sm);
+}
+/* 帯の中の選択欄は帯の地になじませ、項目の名前の横に並べる。 */
+.toolbar-item > select {
+  max-width: 148px;
+  padding: 5px 4px;
+  border: 0;
+  background: transparent;
+  font-size: var(--font-size-sm);
+}
+/* 検索欄の中のボタン（絞り込みなど）は、枠の無い入力欄の一部として枠と地を持たせない。 */
+.toolbar-search > .button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+}
+/* 帯が折り返すスマホの幅では、検索欄を1行に取り、ほかの項目はその下に並べる。 */
+@media (width < 640px) {
+  .toolbar-search {
+    flex-basis: 100%;
+  }
+  .toolbar-item {
+    border-left: 0;
+    border-top: 1px solid var(--background);
+  }
+  .toolbar-item + .toolbar-item {
+    border-left: 1px solid var(--background);
+  }
 }
 
 /* ── パンくずリスト: 今のページやフォルダーまでの道筋 ────────────────── */
@@ -716,9 +749,10 @@ tr.responsive-table-details:hover > td {
     display: inline-flex;
     align-items: center;
   }
+  /* 1行に1つずつ並べる。inline-flexだと、.checkbox-fieldやポップオーバーの中の選択肢まで横に並ぶ。 */
   .touch-targets label:has(> input[type='checkbox']) {
     min-height: var(--tap-target);
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
   }
@@ -728,7 +762,7 @@ tr.responsive-table-details:hover > td {
 }
 /* 文中と表のセルのリンクは、表の行が高くならないようインラインのまま、タップできる範囲だけを
    広げる。インラインボックスのpaddingは周りの文字を動かさずにタップを受け、負のmarginで文字を
-   横方向の元の位置にとどめる。このpaddingと13pxの文字で、WCAG 2.5.8の最小の大きさに届く。 */
+   元の位置にとどめる（パンくずのようにflexの中に置いたときも、行を高くしない）。このpaddingと13pxの文字で、WCAG 2.5.8の最小の大きさに届く。 */
 :root {
   --inline-link-tap-padding-block: 5px;
   --inline-link-tap-padding-inline: 8px;
@@ -737,7 +771,7 @@ tr.responsive-table-details:hover > td {
   .touch-targets td a,
   .touch-targets .eyebrow a {
     padding: var(--inline-link-tap-padding-block) var(--inline-link-tap-padding-inline);
-    margin-inline: calc(-1 * var(--inline-link-tap-padding-inline));
+    margin: calc(-1 * var(--inline-link-tap-padding-block)) calc(-1 * var(--inline-link-tap-padding-inline));
   }
   /* 飾りの無いsummaryはボタンと同じ高さにする。.popoverを開くsummaryはボタンの見た目にする。 */
   .touch-targets details:not(:has(> .popover)) > summary:not([class]) {
@@ -781,6 +815,10 @@ tr.responsive-table-details:hover > td {
   }
   .dialog > header {
     padding: 4px 4px 4px 16px;
+  }
+  /* 右の余白が4pxしか無いので、広い画面の-8pxのままだとボタンがダイアログの外へはみ出す。 */
+  .dialog > header .icon-button {
+    margin-right: 0;
   }
   .dialog > header h2 {
     overflow-wrap: anywhere;

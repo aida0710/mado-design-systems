@@ -96,7 +96,7 @@ export function LanguagePicker({ store, label }: { store: LocaleStore; label: st
           role="menu"
           aria-label={label}
           onKeyDown={navigateMenu}
-          style={{ ...popoverStyle, top: popoverStyle?.top ?? 'auto', bottom: popoverStyle?.bottom ?? 'auto' }}
+          style={popoverStyle}
         >
           {LANGUAGES.map((language) => (
             <button

@@ -7,6 +7,7 @@ import { LanguagePicker } from '../src/react/LanguagePicker';
 import { useCodeLanguage } from '../src/react/useCodeLanguage';
 import { useNavigationLayout } from '../src/react/useNavigationLayout';
 import { UserMenu } from '../src/react/UserMenu';
+import { useQuery } from '../src/react/useQuery';
 
 // jsdomにはモーダルダイアログが無いので、ブラウザの開く・閉じるの代わりにこれを使う。
 beforeAll(() => {
@@ -121,5 +122,28 @@ describe('UserMenu', () => {
     fireEvent.click(screen.getByRole('menuitem', { name: 'サインアウト' }));
     expect(signOut).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole('menu')).toBeNull();
+  });
+});
+
+describe('言語の決まる順', () => {
+  const setBrowserLanguages = (languages: string[]) =>
+    Object.defineProperty(navigator, 'languages', { value: languages, configurable: true });
+
+  it('保存した言語が無ければブラウザの優先言語のうち対応するもの、それも無ければ英語', () => {
+    setBrowserLanguages(['fr-FR', 'ja-JP']);
+    expect(createLocaleStore({ storageKey: 'order.locale' }).getLocale()).toBe('ja');
+    setBrowserLanguages(['fr-FR', 'de-DE']);
+    expect(createLocaleStore({ storageKey: 'order.locale' }).getLocale()).toBe('en');
+    localStorage.setItem('order.locale', 'ja');
+    expect(createLocaleStore({ storageKey: 'order.locale' }).getLocale()).toBe('ja');
+  });
+});
+
+describe('useQuery', () => {
+  it('key が null の間は読み込まず、最初から読み込み中にしない', () => {
+    const load = vi.fn(async () => 1);
+    const { result } = renderHook(() => useQuery({ key: null, load }));
+    expect(result.current.loading).toBe(false);
+    expect(load).not.toHaveBeenCalled();
   });
 });

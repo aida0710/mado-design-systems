@@ -2,7 +2,8 @@
    同じ枠にする: 上部バーとサイドバーは暗い色でひと続き、本文は白。角は四角、表・注記・コードも
    アプリに合わせる。tokens.cssとfonts.cssの後に読み込む。
    メディアクエリはVitePressの切り替え幅（640・768・960pxなど）に合わせるので、アプリの3つの
-   幅の決まりの外に置く。製品ごとの印の形とトップページの中身は各サイトが持つ。 */
+   幅の決まりの外に置く。製品ごとの印の形とトップページの中身は各サイトが持つ。
+   両サイトともVitePressのappearanceをfalseにしてライトだけで出すので、ダークの指定は持たない。 */
 
 /* ── VitePressの変数をデザインシステムの変数に合わせる ─────────────── */
 :root {
@@ -62,7 +63,7 @@
 }
 body {
   color-scheme: light;
-  font-size: 14px;
+  font-size: var(--font-size-md);
 }
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -74,7 +75,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: var(--font-size-md);
   font-weight: 400;
   white-space: nowrap;
 }
@@ -127,7 +128,7 @@ body {
 }
 .VPNavBarMenuLink {
   color: var(--header-text-muted) !important;
-  font-size: 13px !important;
+  font-size: var(--font-size-base) !important;
 }
 .VPNavBarMenuLink:hover,
 .VPNavBarMenuLink.active {
@@ -201,13 +202,13 @@ body {
 .VPSidebarItem.level-0 > .item .text,
 .VPSidebarItem.level-0.has-active > .item .text {
   color: var(--header-text-muted) !important;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 400;
 }
 /* VitePressの既定(--vp-c-text-2)は明るい地向けの灰色なので、暗い地で読める色に替える。 */
 .VPSidebar .VPSidebarItem.level-1 .text {
   color: var(--header-text-muted);
-  font-size: 13px;
+  font-size: var(--font-size-base);
 }
 .VPSidebar .VPSidebarItem.level-1 .link:hover .text {
   color: var(--header-text-strong);
@@ -256,7 +257,7 @@ body {
   font-weight: 550;
 }
 .vp-doc h3 {
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 600;
 }
 .vp-doc p,
@@ -277,7 +278,7 @@ body {
   width: 100%;
   margin: 0;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: var(--font-size-base);
 }
 .vp-doc th {
   background: var(--table-header);
@@ -348,7 +349,7 @@ body {
 .screenshot figcaption {
   margin-top: 10px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   line-height: 1.7;
 }
 .screenshot-dialog {
@@ -373,7 +374,7 @@ body {
 }
 .screenshot-dialog p {
   margin: 12px 0 0;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .screenshot-close {
   position: sticky;
@@ -395,7 +396,7 @@ body {
 .home-eyebrow {
   margin: 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .home-hero {
   display: grid;
@@ -432,7 +433,7 @@ body {
   padding: 0 16px;
   border: 1px solid var(--border-strong);
   color: var(--text);
-  font-size: 14px;
+  font-size: var(--font-size-md);
 }
 .home-button:hover {
   background: var(--surface-hover);
@@ -474,14 +475,14 @@ body {
   color: var(--muted);
 }
 .home-entry-label {
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .home-entry strong {
-  font-size: 18px;
+  font-size: var(--font-size-xl);
   font-weight: 450;
 }
 .home-entry-description {
-  font-size: 13px;
+  font-size: var(--font-size-base);
 }
 .home-entry-arrow {
   position: absolute;
@@ -518,21 +519,21 @@ body {
 }
 .home-feature-copy > p:not(.home-eyebrow) {
   color: var(--muted);
-  font-size: 14px;
+  font-size: var(--font-size-md);
   line-height: 1.85;
 }
 .home-feature-copy > a {
   display: inline-block;
   margin-top: 12px;
   color: var(--link);
-  font-size: 14px;
+  font-size: var(--font-size-md);
 }
 .home-footer {
   display: flex;
   gap: 20px;
   padding: 24px 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .home-footer span {
   margin-right: auto;

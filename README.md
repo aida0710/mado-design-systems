@@ -22,10 +22,10 @@ mado S3 Data Catalogとmado ML Trackingが共有するデザインシステム�
 GitHub Releaseに添付したtarballに依存します。npmのregistryには出していません。
 
 ```sh
-npm install https://github.com/aida0710/mado-design-systems/releases/download/v0.6.1/mado-design-system-0.6.1.tgz
+npm install https://github.com/aida0710/mado-design-systems/releases/download/v0.6.2/mado-design-system-0.6.2.tgz
 ```
 
-`package.json`には`"@mado/design-system": "https://github.com/…/mado-design-system-0.6.1.tgz"`として入り、`package-lock.json`にtarballのハッシュ（`integrity`）が残ります。リポジトリは公開なので、CIやDockerのビルドでも認証は要りません。
+`package.json`には`"@mado/design-system": "https://github.com/…/mado-design-system-0.6.2.tgz"`として入り、`package-lock.json`にtarballのハッシュ（`integrity`）が残ります。リポジトリは公開なので、CIやDockerのビルドでも認証は要りません。
 
 テキストの色付け（`@mado/design-system/code`）を使うアプリは、`highlight.js`（11.11以上）も自分の依存に入れます。highlight.jsは省略できるpeer dependencyで、CSSだけを使うアプリには要りません。
 

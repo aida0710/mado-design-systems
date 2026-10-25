@@ -29,7 +29,7 @@ export function useQuery<T>({
     value?: T;
     loading: boolean;
     failure: { cause: unknown } | null;
-  }>({ key: null, loading: true, failure: null });
+  }>(() => ({ key, loading: key !== null, failure: null }));
   const reload = useCallback(() => setRevision((value) => value + 1), []);
 
   useEffect(() => {
