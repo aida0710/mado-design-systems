@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { clampNavigationWidth, narrowerThan, NAVIGATION_WIDTH, storedNavigationWidth } from '../layout';
-import { readStorage, writeStorage } from '../storage';
-import { useMediaQuery } from './useMediaQuery';
+import { clampNavigationWidth, narrowerThan, NAVIGATION_WIDTH, storedNavigationWidth } from '../layout.js';
+import { readStorage, writeStorage } from '../storage.js';
+import { useMediaQuery } from './useMediaQuery.js';
 
 // md未満ではアイコンのレールでも狭すぎるので、ドロワーにナビゲーションを収める。
 // lg未満では通常のサイドバーが中身を圧迫するので、レールだけを出す。

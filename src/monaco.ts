@@ -3,7 +3,7 @@
  * getComputedStyleでルート要素から読む。Monacoのモジュールはアプリが渡すので、このパッケージは
  * monaco-editorを含まない。
  */
-import type { Theme } from './theme';
+import type { Theme } from './theme.js';
 
 /** テーマに必要な`monaco.editor`の部分。 */
 export interface MonacoThemeRegistry {

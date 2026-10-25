@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState, type CSSProperties, type RefObject } from 'react';
-import { placeDropdown, type DropdownAlignment } from '../popover';
+import { placeDropdown, type DropdownAlignment } from '../popover.js';
 
 // popover属性を持つ要素はトップレイヤーに出るので、サイドバーのoverflowや重なり順で隠れない。
 // popover属性の無い要素と、Popover APIの無いブラウザでは、position: fixedだけになる。

@@ -1,19 +1,40 @@
-import { useEffect, useId, useRef, type FocusEvent, type KeyboardEvent, type MouseEvent, type ReactNode, type Ref } from 'react';
-import { initialsOf } from '../format';
-import { isListNavigationKey, moveActiveIndex } from '../listNavigation';
-import { usePopover } from './usePopover';
+import {
+  useEffect,
+  useId,
+  useRef,
+  type FocusEvent,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+  type Ref,
+} from 'react';
+import { initialsOf } from '../format.js';
+import { isListNavigationKey, moveActiveIndex } from '../listNavigation.js';
+import { usePopover } from './usePopover.js';
 
-export interface UserMenuItem {
+interface UserMenuItemBase {
   /** 繰り返しのkeyと、読み上げの名前。 */
   label: string;
-  href: string;
   /** 前の項目との間に区切りの線を引く（全体設定など、まとまりが替わる項目）。 */
   startsGroup?: boolean;
 }
 
+/** 画面へ移る項目。 */
+export interface UserMenuLinkItem extends UserMenuItemBase {
+  href: string;
+}
+
+/** その場で操作する項目（サインアウトなど）。選ぶとメニューを閉じてから呼ぶ。 */
+export interface UserMenuActionItem extends UserMenuItemBase {
+  onSelect: () => void;
+  disabled?: boolean;
+}
+
+export type UserMenuItem = UserMenuLinkItem | UserMenuActionItem;
+
 /** 項目のリンクの描き方。react-routerのLinkなどを使うアプリが渡す。既定は<a>。 */
 export type UserMenuLinkRenderer = (
-  item: UserMenuItem,
+  item: UserMenuLinkItem,
   props: { ref: Ref<HTMLAnchorElement>; role: 'menuitem'; tabIndex: -1; className: string; children: ReactNode },
 ) => ReactNode;
 
@@ -47,7 +68,7 @@ export function UserMenu({
 }) {
   const menuId = useId();
   const { container, isOpen, open, close, toggle } = usePopover({ closeKey });
-  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
   // キーボードで開いたとき、メニューを描いた後にフォーカスする項目。
   const itemToFocusOnOpen = useRef<number | null>(null);
 
@@ -108,17 +129,32 @@ export function UserMenu({
             <strong>{displayName}</strong>
             {email && <span className="muted">{email}</span>}
           </div>
-          {items.map((item, index) =>
-            renderLink(item, {
-              ref: (element: HTMLAnchorElement | null) => {
-                itemRefs.current[index] = element;
-              },
-              role: 'menuitem',
-              tabIndex: -1,
-              className: item.startsGroup ? 'menu-item starts-group' : 'menu-item',
-              children: item.label,
-            }),
-          )}
+          {items.map((item, index) => {
+            const className = item.startsGroup ? 'menu-item starts-group' : 'menu-item';
+            const ref = (element: HTMLElement | null) => {
+              itemRefs.current[index] = element;
+            };
+            if ('href' in item) {
+              return renderLink(item, { ref, role: 'menuitem', tabIndex: -1, className, children: item.label });
+            }
+            return (
+              <button
+                key={item.label}
+                ref={ref}
+                type="button"
+                role="menuitem"
+                tabIndex={-1}
+                className={className}
+                disabled={item.disabled}
+                onClick={() => {
+                  close();
+                  item.onSelect();
+                }}
+              >
+                {item.label}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

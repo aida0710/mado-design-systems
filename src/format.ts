@@ -66,13 +66,20 @@ export function formatRelativeTime(
   { intlLocale, now = Date.now() }: { intlLocale: string; now?: number },
 ): string {
   const relativeTimeFormat = getRelativeTimeFormat(intlLocale);
+  const format = (amount: number, unit: Intl.RelativeTimeFormatUnit) =>
+    withoutSpaceBeforeJapaneseUnit(relativeTimeFormat.format(amount, unit), intlLocale);
   const elapsedSeconds = Math.max(0, (now - new Date(value).getTime()) / 1000);
   for (const { unit, seconds } of RELATIVE_TIME_UNITS) {
     if (elapsedSeconds >= seconds) {
-      return relativeTimeFormat.format(-Math.floor(elapsedSeconds / seconds), unit);
+      return format(-Math.floor(elapsedSeconds / seconds), unit);
     }
   }
-  return relativeTimeFormat.format(0, 'second');
+  return format(0, 'second');
+}
+
+/** 日本語のIntlは「5分前」のように数字と単位の間に空白を入れる。日本語の文中の書き方（「5分前」）にそろえる。 */
+function withoutSpaceBeforeJapaneseUnit(text: string, intlLocale: string): string {
+  return intlLocale.startsWith('ja') ? text.replace(/(\d) (?=\p{Script=Han}|\p{Script=Hiragana})/gu, '$1') : text;
 }
 
 /** 上部バーの丸い印に出す名前の頭文字（2文字まで）。二語以上なら各語の頭、一語なら先頭の二文字。 */

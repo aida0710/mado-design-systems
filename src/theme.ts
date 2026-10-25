@@ -2,7 +2,7 @@
  * ライトテーマとダークテーマ。テーマを<html data-theme>に書くと、tokens.cssの色が切り替わる。
  * 利用者が選ぶまでは、ページはOSの設定に従う。
  */
-import { readStorage, writeStorage } from './storage';
+import { readStorage, writeStorage } from './storage.js';
 
 export type Theme = 'light' | 'dark';
 
