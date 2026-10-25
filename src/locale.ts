@@ -3,7 +3,7 @@
  * 各アプリは自分の保存キーで別々のストアを持つので、一方のアプリで言語を選んでも、もう一方は
  * 変わらない。
  */
-import { readStorage, writeStorage } from './storage';
+import { readStorage, writeStorage } from './storage.js';
 
 export type Locale = 'en' | 'ja';
 

@@ -2,7 +2,7 @@
  * アクセストークンの期限の選び方。決まった日数、無期限、分・時間・日での入力、カレンダーでの日時の
  * どれかを選び、APIには期限の日時（ISO 8601）か、無期限のnullを渡す。
  */
-import { formatLocalDateTimeInput, parseLocalDateTimeInput } from './datetimeInput';
+import { formatLocalDateTimeInput, parseLocalDateTimeInput } from './datetimeInput.js';
 
 /** 選択肢に並べる日数。既定は90日。 */
 export const TOKEN_EXPIRY_PRESET_DAYS = [7, 30, 90, 365] as const;

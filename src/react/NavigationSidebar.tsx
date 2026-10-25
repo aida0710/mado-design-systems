@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import { NavigationResizeHandle } from './NavigationResizeHandle';
-import type { NavigationLayout } from './useNavigationLayout';
+import { NavigationResizeHandle } from './NavigationResizeHandle.js';
+import type { NavigationLayout } from './useNavigationLayout.js';
 
 export interface NavigationSidebarLabels {
   /** <aside>の読み上げの名前。ページのほかのサイドバーと区別する。 */

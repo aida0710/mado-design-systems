@@ -65,7 +65,7 @@ describe('formatRelativeTime', () => {
   const now = Date.parse('2026-10-26T12:00:00Z');
 
   it('経過時間を表示言語の言い方で書く', () => {
-    expect(formatRelativeTime('2026-10-26T11:55:00Z', { intlLocale: 'ja-JP', now })).toBe('5 分前');
+    expect(formatRelativeTime('2026-10-26T11:55:00Z', { intlLocale: 'ja-JP', now })).toBe('5分前');
     expect(formatRelativeTime('2026-10-25T12:00:00Z', { intlLocale: 'en-US', now })).toBe('yesterday');
   });
 

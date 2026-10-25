@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { NAVIGATION_WIDTH } from '../layout';
+import { NAVIGATION_WIDTH } from '../layout.js';
 
 /**
  * 通常のサイドバーの右端。ドラッグするか、フォーカスして←/→（最小と最大の幅はHome/End）で幅を

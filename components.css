@@ -94,6 +94,12 @@
 .notice > span {
   flex: 1;
 }
+/* 通知の本文の下に添える補足。 */
+.notice-detail {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--font-size-sm);
+}
 .notice.error {
   color: var(--error);
   background: var(--error-tint);
@@ -297,6 +303,8 @@
 
 /* ── ダイアログ ──────────────────────────────────────────────────────── */
 .dialog {
+  /* ブラウザ既定の中央寄せに頼らない（Tailwindのpreflightなどが既定のmarginを消すため）。 */
+  margin: auto;
   border: 1px solid var(--border);
   padding: 0;
   color: var(--text);
@@ -490,6 +498,7 @@ tr.selected td {
   padding: 12px;
   box-shadow: var(--shadow-menu);
   border: 1px solid var(--border);
+  color: var(--text);
   background: var(--background);
 }
 /* useAnchoredPopoverでボタンに合わせて置くポップオーバー。position: fixedで、位置はhookが決める。 */
@@ -680,6 +689,9 @@ tr.responsive-table-details:hover > td {
   .icon-button {
     width: var(--tap-target);
     height: var(--tap-target);
+  }
+  .menu-item {
+    min-height: var(--tap-target);
   }
   .page-header {
     align-items: flex-start;

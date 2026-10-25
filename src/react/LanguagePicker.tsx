@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
 import { Check, Globe } from 'lucide-react';
-import { LANGUAGES, type LocaleStore } from '../locale';
-import { useAnchoredPopover } from './useAnchoredPopover';
-import { useLocale } from './useLocale';
+import { LANGUAGES, type LocaleStore } from '../locale.js';
+import { useAnchoredPopover } from './useAnchoredPopover.js';
+import { useLocale } from './useLocale.js';
 
 // 共通のポップオーバーの幅。高さは2つの言語のボタンに合わせる。
 const LANGUAGE_MENU_MIN_WIDTH = 220;

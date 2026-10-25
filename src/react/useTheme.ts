@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { initialTheme, readDocumentTheme, saveTheme, type Theme } from '../theme';
+import { initialTheme, readDocumentTheme, saveTheme, type Theme } from '../theme.js';
 
 /** ライト・ダークの切り替え。テーマを<html data-theme>に書き、利用者が選んだテーマを保存する。 */
 export function useTheme({ storageKey }: { storageKey: string }): { theme: Theme; toggle: () => void } {

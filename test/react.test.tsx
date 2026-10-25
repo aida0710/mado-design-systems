@@ -6,6 +6,7 @@ import { Dialog } from '../src/react/Dialog';
 import { LanguagePicker } from '../src/react/LanguagePicker';
 import { useCodeLanguage } from '../src/react/useCodeLanguage';
 import { useNavigationLayout } from '../src/react/useNavigationLayout';
+import { UserMenu } from '../src/react/UserMenu';
 
 // jsdomにはモーダルダイアログが無いので、ブラウザの開く・閉じるの代わりにこれを使う。
 beforeAll(() => {
@@ -96,5 +97,29 @@ describe('useCodeLanguage', () => {
     expect(JSON.parse(localStorage.getItem('app.codeLanguage') ?? '{}')).toEqual({ conf: 'yaml' });
     rerender({ fileName: 'b.conf' });
     expect(result.current.language).toBe('yaml');
+  });
+});
+
+describe('UserMenu', () => {
+  it('リンクと操作の項目を並べ、操作を選ぶとメニューを閉じて呼ぶ', () => {
+    const signOut = vi.fn();
+    render(
+      <UserMenu
+        displayName="Masaki Aida"
+        email="user@example.com"
+        label="ユーザーメニュー"
+        items={[
+          { label: 'アカウント', href: '/account' },
+          { label: 'サインアウト', onSelect: signOut, startsGroup: true },
+        ]}
+      />,
+    );
+    const avatar = screen.getByRole('button', { name: 'ユーザーメニュー' });
+    expect(avatar.textContent).toBe('MA');
+    fireEvent.click(avatar);
+    expect(screen.getByRole('menuitem', { name: 'アカウント' }).getAttribute('href')).toBe('/account');
+    fireEvent.click(screen.getByRole('menuitem', { name: 'サインアウト' }));
+    expect(signOut).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole('menu')).toBeNull();
   });
 });

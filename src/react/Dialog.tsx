@@ -1,6 +1,6 @@
 import { useId, useRef, type MouseEvent, type ReactNode } from 'react';
 import { X } from 'lucide-react';
-import { useModalDialog } from './useModalDialog';
+import { useModalDialog } from './useModalDialog.js';
 
 export type DialogSize = 'default' | 'wide' | 'extra-wide';
 /** 640px未満での形。'fullscreen'は画面いっぱい、'sheet'は下から出る（短い確認向け）。 */

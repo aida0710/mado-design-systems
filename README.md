@@ -22,10 +22,10 @@ mado S3 Data Catalogとmado ML Trackingが共有するデザインシステム�
 GitHub Releaseに添付したtarballに依存します。npmのregistryには出していません。
 
 ```sh
-npm install https://github.com/aida0710/mado-design-systems/releases/download/v0.6.0/mado-design-system-0.6.0.tgz
+npm install https://github.com/aida0710/mado-design-systems/releases/download/v0.6.1/mado-design-system-0.6.1.tgz
 ```
 
-`package.json`には`"@mado/design-system": "https://github.com/…/mado-design-system-0.6.0.tgz"`として入り、`package-lock.json`にtarballのハッシュ（`integrity`）が残ります。リポジトリは公開なので、CIやDockerのビルドでも認証は要りません。
+`package.json`には`"@mado/design-system": "https://github.com/…/mado-design-system-0.6.1.tgz"`として入り、`package-lock.json`にtarballのハッシュ（`integrity`）が残ります。リポジトリは公開なので、CIやDockerのビルドでも認証は要りません。
 
 テキストの色付け（`@mado/design-system/code`）を使うアプリは、`highlight.js`（11.11以上）も自分の依存に入れます。highlight.jsは省略できるpeer dependencyで、CSSだけを使うアプリには要りません。
 
@@ -98,7 +98,7 @@ Reactの部品を使うアプリは、`react`・`react-dom`（19.2以上）と`l
 - `NavigationSidebar`のリンクは`renderLinks`でアプリが描きます。アイコンだけの列のときは`showsTitles`が`true`になるので、リンクに`title`を付けます。
 - `LanguagePicker`には、アプリが`createLocaleStore`で作ったものを渡します。
 - `ProductLogo`の印は製品ごとの`<svg className="product-mark">`をアプリが渡します。強調色の線に`product-mark-accent`、文字色の線に`product-mark-base`を付けます。線の太さはどの製品も1.75です。
-- `UserMenu`の項目のリンクは既定で`<a>`です。react-routerを使うアプリは`renderLink`で`Link`を描きます。
+- `UserMenu`の項目は、画面へ移るリンク（`href`）か、その場の操作（`onSelect`、サインアウトなど）です。リンクは既定で`<a>`で、react-routerを使うアプリは`renderLink`で`Link`を描きます。
 - `useQuery`の`error`は投げられたものをそのまま返します。文言にするのはアプリです（APIのエラーの形がアプリごとに違うため）。
 
 ## 変数と部品を足す・変えるときの決まり

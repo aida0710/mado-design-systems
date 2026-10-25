@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { detectLanguage, isCodeLanguage, type CodeLanguage } from '@mado/design-system/code';
-import { readStorage, writeStorage } from '../storage';
+import { readStorage, writeStorage } from '../storage.js';
 
 /** 'auto'は判定した形式に従う。ほかの値は利用者が選んだ形式。 */
 export type CodeLanguageChoice = CodeLanguage | 'auto';
