@@ -1,5 +1,5 @@
 /*
- * Design tokens shared by Mado and Mado Model Tracking: theme colors, type, and corner shapes.
+ * Design tokens shared by mado S3 Data Catalog and mado ML Tracking: theme colors, type, and corner shapes.
  * Apps read them as custom properties and keep their own layout values (widths, paddings).
  * Text colors keep 4.5:1 against every surface they sit on (WCAG AA); lines and indicators keep 3:1.
  * The dark theme applies while the root element has data-theme="dark".
@@ -29,7 +29,6 @@
   --accent-strong: #007b77;
   --accent-tint: #e2f3f1;
   --on-accent: #fff;
-  --on-accent-hover: rgb(255 255 255 / 8%);
 
   /* Feedback. --error-fill carries white text; --warning only marks borders. */
   --error: #ba2737;
@@ -51,8 +50,6 @@
   --status-neutral-background: #e3e5e8;
   --status-attention-text: #6b4500;
   --status-attention-background: #fde7b0;
-  --status-stopped-text: #8a5300;
-  --status-stopped-background: #fde7c4;
 
   /* The header stays dark in both themes. */
   --header: #151515;
@@ -64,7 +61,6 @@
   --header-control-hover: #333;
   --header-border: #333;
   --header-indicator: #00b9b1;
-  --header-alert: #ffb4bc;
   --avatar: #007b77;
   --avatar-hover: #006e6a;
 
@@ -86,22 +82,16 @@
   --code-heading: #4fc1ff;
   --code-meta: #d7ba7d;
 
-  /* Data marks other than series colors. */
-  --chart-positive: #2a78d6;
-  --chart-negative: #d03b3b;
-  --chart-missing: #9a9a96;
+  /* Lineage graph node kinds, used by the lineage views of both apps. */
   --lineage-model: #7991cf;
   --lineage-dataset: #b79854;
 
   /* Overlays and elevation. */
   --backdrop: rgb(0 0 0 / 53%);
-  --media-label-background: rgb(0 0 0 / 55%);
-  --media-label-text: #fff;
   --shadow-menu: 0 4px 18px rgb(0 0 0 / 20%);
   --shadow-popover: 0 8px 24px rgb(0 0 0 / 20%);
   --shadow-dialog: 0 12px 50px rgb(0 0 0 / 33%);
   --shadow-drawer: 4px 0 30px rgb(0 0 0 / 40%);
-  --shadow-drag: 0 6px 18px rgb(0 0 0 / 18%);
 
   /* Corners: square controls, slightly rounded small pieces, and pills. Circles use 50%. */
   --radius-none: 0;
@@ -113,7 +103,15 @@
     'IBM Plex Sans', 'Noto Sans JP', 'Noto Sans CJK JP', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   --mono: 'IBM Plex Mono', 'Noto Sans JP', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  /* Text sizes. --font-size-base is the body text; the smaller steps carry table details, captions
+     and badges, the larger ones headings. */
+  --font-size-2xs: 10px;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
   --font-size-base: 13px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
 
   /* The smallest size of anything tapped on a narrow (touch) screen. */
   --tap-target: 40px;
@@ -156,6 +154,4 @@
   --status-neutral-background: #3c4149;
   --status-attention-text: #ffd98a;
   --status-attention-background: #5a4413;
-  --status-stopped-text: #f6cf8e;
-  --status-stopped-background: #5a4220;
 }

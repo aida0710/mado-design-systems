@@ -39,12 +39,12 @@ const pairs = [
   ['--success', '--success-tint', 4.5],
   ['--on-accent', '--accent-strong', 4.5],
   ['--on-error-fill', '--error-fill', 4.5],
-  ...['success', 'info', 'danger', 'neutral', 'attention', 'stopped'].map((kind) => [
+  ...['success', 'info', 'danger', 'neutral', 'attention'].map((kind) => [
     `--status-${kind}-text`,
     `--status-${kind}-background`,
     4.5,
   ]),
-  ...['--header-text', '--header-text-muted', '--header-text-strong', '--header-alert'].flatMap((text) =>
+  ...['--header-text', '--header-text-muted', '--header-text-strong'].flatMap((text) =>
     ['--header', '--header-hover', '--header-active'].map((surface) => [text, surface, 4.5]),
   ),
   ...[

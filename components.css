@@ -38,7 +38,7 @@
 .button.small {
   min-height: 29px;
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .button.danger {
   color: var(--error);
@@ -88,7 +88,7 @@
   margin: 12px 0;
   background: var(--surface);
   border-left: 3px solid var(--accent);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   overflow-wrap: anywhere;
 }
 .notice > span {
@@ -103,6 +103,10 @@
   color: var(--success);
   background: var(--success-tint);
   border-left-color: var(--success);
+}
+/* Something to look at before going on: a stopped scan, a setting the server lacks. */
+.notice.warning {
+  border-left-color: var(--warning);
 }
 
 /* ── Page frame and header ───────────────────────────────────────────── */
@@ -126,7 +130,7 @@
 }
 .eyebrow {
   color: var(--link);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   margin-bottom: 12px;
 }
 .breadcrumb-separator {
@@ -139,7 +143,7 @@
   align-items: center;
   gap: 12px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
 }
 .page-actions {
   display: flex;
@@ -167,7 +171,7 @@
 /* Label and value pairs, one per row. */
 .details-list {
   margin: 0;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .details-list > div {
   display: grid;
@@ -226,7 +230,7 @@
   flex-direction: column;
   gap: 7px;
   margin-bottom: 16px;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .field > span,
 .field > label {
@@ -266,7 +270,7 @@
   margin: 8px 0 12px;
   padding-top: 14px;
   border-top: 1px solid var(--border);
-  font-size: 13px;
+  font-size: var(--font-size-base);
 }
 .form-section-heading:first-child {
   margin-top: 0;
@@ -305,6 +309,13 @@
 .dialog.wide {
   width: min(740px, calc(100vw - 32px));
 }
+.dialog.extra-wide {
+  width: min(1040px, calc(100vw - 32px));
+}
+/* The dialog takes the focus itself only on a touch screen (useModalDialog); no ring around it. */
+.dialog:focus-visible {
+  outline: none;
+}
 .dialog::backdrop {
   background: var(--backdrop);
 }
@@ -321,7 +332,22 @@
 }
 .dialog > header h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--font-size-xl);
+}
+.dialog > header .dialog-heading {
+  min-width: 0;
+}
+/* The line under the title, such as the path the dialog is about. */
+.dialog > header .dialog-heading > p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: var(--font-size-xs);
+  overflow-wrap: anywhere;
+}
+.dialog > header .icon-button {
+  flex: 0 0 auto;
+  margin-right: -8px;
 }
 .dialog > form,
 .dialog > .dialog-body,
@@ -352,7 +378,7 @@
 table {
   border-collapse: collapse;
   width: 100%;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 th {
   font-weight: 600;
@@ -367,7 +393,7 @@ th small {
   font-family: var(--font);
   font-weight: 400;
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
   margin-bottom: 7px;
 }
 td {
@@ -378,7 +404,7 @@ td {
 }
 td small {
   display: block;
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
   color: var(--muted);
   margin-top: 4px;
 }
@@ -396,7 +422,7 @@ tr.selected td {
   padding: 5px 12px 5px 16px;
   background: var(--surface);
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .table-footer > span:last-child {
   display: flex;
@@ -410,33 +436,38 @@ tr.selected td {
   align-items: center;
   gap: 5px;
   border-radius: var(--radius-pill);
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
   letter-spacing: 0.15px;
   padding: 5px 9px;
   white-space: nowrap;
 }
-.status-finished {
+.status-badge.status-success {
   background: var(--status-success-background);
   color: var(--status-success-text);
 }
-.status-running,
-.status-claimed {
+/* In progress. */
+.status-badge.status-info {
   background: var(--status-info-background);
   color: var(--status-info-text);
 }
-.status-failed {
+.status-badge.status-danger {
   background: var(--status-danger-background);
   color: var(--status-danger-text);
 }
-.status-queued,
-.status-canceled {
+/* Waiting, cancelled, or no state worth a color. */
+.status-badge.status-neutral {
   background: var(--status-neutral-background);
   color: var(--status-neutral-text);
 }
 /* Waits for a person. */
-.status-attention {
+.status-badge.status-attention {
   background: var(--status-attention-background);
   color: var(--status-attention-text);
+}
+/* A mark in the brand color: the default of a list, the latest version. */
+.status-badge.status-accent {
+  background: var(--accent-tint);
+  color: var(--link);
 }
 /* Badges beside a label in one cell. */
 .badge-group {
@@ -459,6 +490,131 @@ tr.selected td {
   box-shadow: var(--shadow-menu);
   border: 1px solid var(--border);
   background: var(--background);
+}
+/* A popover anchored with useAnchoredPopover: position: fixed, placed by the hook. */
+.popover.anchored-popover {
+  position: fixed;
+  margin: 0;
+  right: auto;
+  min-width: 0;
+}
+/* A popover that lists actions or choices instead of holding a form. */
+.popover.menu {
+  padding: 4px 0;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--font-size-base);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: var(--surface-hover);
+  text-decoration: none;
+}
+.menu-item:focus-visible {
+  outline-offset: -2px;
+}
+.menu-item:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+.menu-item[aria-checked='false'] {
+  /* Lines up with the checked item, whose check mark (15px and the gap) comes first. */
+  padding-left: calc(14px + 15px + 8px);
+}
+.menu-item.danger {
+  color: var(--error);
+}
+.menu-separator {
+  height: 1px;
+  margin: 4px 0;
+  border: 0;
+  background: var(--border);
+}
+
+/* ── The bar above a list: a search field and controls, wrapping when they do not fit ── */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  min-height: 40px;
+  background: var(--surface);
+}
+/* A magnifier and an input without its own frame; also used alone, outside a toolbar. */
+.toolbar-search {
+  display: flex;
+  flex: 1 1 320px;
+  align-items: center;
+  gap: 10px;
+  min-width: 180px;
+  padding: 0 4px 0 12px;
+  border-bottom: 1px solid var(--input-border);
+  background: var(--surface);
+  color: var(--muted);
+}
+.toolbar-search:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.toolbar-search > svg {
+  flex: none;
+}
+.toolbar-search > input {
+  flex: 1;
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: var(--font-size-sm);
+}
+.toolbar-search > input:focus-visible {
+  outline: none;
+}
+/* The field draws its own clear button. */
+.toolbar-search > input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.toolbar-search .icon-button {
+  width: 28px;
+  height: 28px;
+  color: var(--muted);
+}
+/* A control beside the search: a select, a checkbox, a filter. */
+.toolbar-item {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  padding: 6px 12px;
+  border-left: 1px solid var(--background);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Breadcrumbs: the path to the current page or folder ─────────────── */
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 4px;
+  min-width: 0;
+}
+.breadcrumbs > .breadcrumb-separator {
+  margin: 0;
 }
 
 /* ── Responsive table: primary columns stay in the row, secondary ones open beneath it ── */
@@ -557,6 +713,25 @@ tr.responsive-table-details:hover > td {
     min-height: var(--tap-target);
   }
 }
+/* Links in text and table cells stay inline so table rows stay short, and grow only their tappable
+   area: an inline box's padding takes taps without moving the text around it, and the negative
+   margin keeps the text where it was sideways. The padding reaches the WCAG 2.5.8 minimum target
+   with the 13px text. */
+:root {
+  --inline-link-tap-padding-block: 5px;
+  --inline-link-tap-padding-inline: 8px;
+}
+@media (width < 640px) {
+  .touch-targets td a,
+  .touch-targets .eyebrow a {
+    padding: var(--inline-link-tap-padding-block) var(--inline-link-tap-padding-inline);
+    margin-inline: calc(-1 * var(--inline-link-tap-padding-inline));
+  }
+  /* A plain summary as tall as a button; a summary that opens a .popover is styled as a button. */
+  .touch-targets details:not(:has(> .popover)) > summary:not([class]) {
+    padding-block: calc((var(--tap-target) - 1lh) / 2);
+  }
+}
 /* Below 640px a dialog fills the screen; a short confirmation becomes a sheet on the bottom edge. */
 @media (width < 640px) {
   :root {
@@ -574,7 +749,7 @@ tr.responsive-table-details:hover > td {
   }
   .wizard-steps {
     gap: 12px;
-    font-size: 11px;
+    font-size: var(--font-size-xs);
   }
   .dialog.fullscreen-on-narrow {
     width: 100vw;
@@ -613,4 +788,16 @@ tr.responsive-table-details:hover > td {
   .dialog footer .button {
     flex: 1 1 auto;
   }
+}
+
+/* ── Charts drawn with recharts ──────────────────────────────────────── */
+/* recharts writes #666 into the SVG, which keeps only 3:1 on the dark background; the muted text
+   keeps 4.5:1 on both themes. */
+.recharts-cartesian-axis-tick-value,
+.recharts-label {
+  fill: var(--muted);
+}
+.recharts-cartesian-axis-line,
+.recharts-cartesian-axis-tick-line {
+  stroke: var(--muted);
 }

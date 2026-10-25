@@ -101,12 +101,12 @@ h1 {
   margin-bottom: 7px;
 }
 h2 {
-  font-size: 18px;
+  font-size: var(--font-size-xl);
   font-weight: 550;
   margin-bottom: 12px;
 }
 h3 {
-  font-size: 14px;
+  font-size: var(--font-size-md);
   font-weight: 600;
   margin-top: 20px;
   margin-bottom: 12px;
@@ -115,7 +115,7 @@ pre,
 code,
 .mono {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 pre {
   margin: 0;
@@ -124,7 +124,7 @@ pre {
 }
 .muted {
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 .nowrap {
   white-space: nowrap;

@@ -50,7 +50,7 @@ html {
   padding: 0 18px;
   color: var(--header-text);
   white-space: nowrap;
-  font-size: 14px;
+  font-size: var(--font-size-md);
   gap: 5px;
 }
 /* Beside the full sidebar the app name spans the same width, so the screen starts below its edge. */
@@ -83,7 +83,7 @@ html {
   background: var(--avatar);
   display: grid;
   place-items: center;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 650;
   color: var(--on-accent);
 }
@@ -152,7 +152,7 @@ button.avatar {
 .navigation-group-label {
   padding: 14px 16px 4px;
   color: var(--header-text-muted);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -300,7 +300,7 @@ button.avatar {
   justify-content: space-between;
   min-height: var(--topbar-height);
   padding: 0 6px 0 18px;
-  font-size: 14px;
+  font-size: var(--font-size-md);
   border-bottom: 1px solid var(--header-border);
 }
 .navigation-drawer-header .icon-button {
@@ -342,7 +342,7 @@ button.avatar {
   background: var(--background);
 }
 .login-mark {
-  font-size: 16px;
+  font-size: var(--font-size-lg);
   font-weight: 600;
   line-height: 1;
 }
@@ -356,10 +356,14 @@ button.avatar {
 .login-header > :last-child {
   flex: none;
 }
+/* The language menu button; its menu is placed by useAnchoredPopover. */
+.language-picker {
+  position: relative;
+}
 .login-eyebrow {
   margin: 20px 0 6px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
 }
 .login-mark + h1 {
@@ -380,7 +384,7 @@ button.avatar {
   gap: 12px;
   margin: 22px 0;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
 }
 .login-or::before,
 .login-or::after {
