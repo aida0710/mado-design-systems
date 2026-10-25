@@ -1,5 +1,19 @@
 # 変更履歴
 
+## 0.6.2
+
+mado ML Trackingへの取り込みで見つかった不具合と、両アプリが同じ指定を書いていた部分を直しました。
+
+- 640px未満のダイアログで、閉じるボタンがダイアログの外へはみ出して横にスクロールしていたのを直しました。
+- 900px未満の`.touch-targets`で、チェックボックスのラベルを1行に1つずつ並べるようにしました（`.checkbox-field`やポップオーバーの選択肢が横に並んでいました）。
+- `.menu-item`の行の高さをそろえ、押せない危険な操作が赤いまま残らないようにしました。
+- `.popover.anchored-popover`が`.popover`の`top: 100%`を打ち消すようにしました。使う側で`top`・`bottom`を書き直す必要はありません。
+- 一覧の上の帯の選択欄（`.toolbar-item > select`）、検索欄の中のボタン、640px未満の並べ方を足しました。両アプリが同じ指定を書いていたものです。
+- `.touch-targets`の表とパンくずのリンクが、flexの中で行を高くしないようにしました。
+- `UserMenu`の項目に`key`を付けました。`useQuery`は`key`が`null`のとき、最初の描画から読み込み中にしません。`useCodeLanguage`の`fileName`は`null`も受け付けます。
+- `@mado/design-system/locale`に`intlLocaleOf`を足しました。
+- `docs.css`の文字の大きさを変数にしました。
+
 ## 0.6.1
 
 - `dist/`の相対importに拡張子`.js`を付けました。0.6.0はバンドラーでは読めても、NodeのESM（アプリのVitestなど）では読めませんでした。

@@ -1,4 +1,5 @@
 import {
+  Fragment,
   useEffect,
   useId,
   useRef,
@@ -135,7 +136,11 @@ export function UserMenu({
               itemRefs.current[index] = element;
             };
             if ('href' in item) {
-              return renderLink(item, { ref, role: 'menuitem', tabIndex: -1, className, children: item.label });
+              return (
+                <Fragment key={item.label}>
+                  {renderLink(item, { ref, role: 'menuitem', tabIndex: -1, className, children: item.label })}
+                </Fragment>
+              );
             }
             return (
               <button

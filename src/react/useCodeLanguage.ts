@@ -12,8 +12,8 @@ const UNREMEMBERED_EXTENSIONS = new Set(['txt', 'text']);
  * 選んだ形式を覚えるキー。拡張子、.envのファイルは'.env'、Dockerfileは'dockerfile'。拡張子の
  * 無いほかの名前と.txtは''になり、選んだ形式を覚えない。
  */
-export function codeLanguageKey(fileName: string): string {
-  const name = fileName.split('/').pop()?.toLowerCase() ?? '';
+export function codeLanguageKey(fileName: string | null | undefined): string {
+  const name = (fileName ?? '').split('/').pop()?.toLowerCase() ?? '';
   if (name === '.env' || name.startsWith('.env.')) return '.env';
   if (name === 'dockerfile' || name.startsWith('dockerfile.')) return 'dockerfile';
   const dot = name.lastIndexOf('.');
@@ -65,7 +65,7 @@ export function useCodeLanguage({
   text,
 }: {
   storageKey: string;
-  fileName: string;
+  fileName: string | null | undefined;
   mimeType?: string;
   text: string;
 }): CodeLanguageState {

@@ -21,6 +21,11 @@ const FALLBACK_LOCALE: Locale = 'en';
 
 const INTL_LOCALES: Record<Locale, string> = { en: 'en-US', ja: 'ja-JP' };
 
+/** Intlの書式に渡す言語（'ja-JP'など）。 */
+export function intlLocaleOf(locale: Locale): string {
+  return INTL_LOCALES[locale];
+}
+
 export function isLocale(value: unknown): value is Locale {
   return value === 'en' || value === 'ja';
 }
@@ -69,7 +74,7 @@ export function createLocaleStore({ storageKey }: { storageKey: string }): Local
 
   return {
     getLocale: () => locale,
-    getIntlLocale: () => INTL_LOCALES[locale],
+    getIntlLocale: () => intlLocaleOf(locale),
     setLocale: (next) => {
       update(next);
       writeStorage(storageKey, next);
