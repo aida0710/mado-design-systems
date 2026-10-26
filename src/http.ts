@@ -124,14 +124,102 @@ export async function requestJson<Schema extends z.ZodType>(
   return parsed.data;
 }
 
-/** JSONの本文を送る要求の設定。 */
-export function jsonRequestInit(method: 'POST' | 'PUT' | 'PATCH' | 'DELETE', body?: unknown): RequestInit {
+/** JSONの本文を送る要求の設定。止めたい呼び出しは`signal`を渡す。 */
+export function jsonRequestInit(
+  method: 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  body?: unknown,
+  { signal }: { signal?: AbortSignal } = {},
+): RequestInit {
+  const base: RequestInit = signal ? { method, signal } : { method };
   return body === undefined
-    ? { method }
-    : { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+    ? base
+    : { ...base, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
 }
 
-/** cursorで分けた一覧の1ページ（MMT・DCの両方の一覧の形）。 */
+/**
+ * cursorで分けた一覧の1ページ（MMT・DCの両方の一覧の形）。契約に無い項目は通さない（APIの形が
+ * 変わったことに気づけるように）。
+ */
 export function cursorPageSchema<Item extends z.ZodType>(item: Item) {
-  return z.object({ items: z.array(item), nextCursor: z.string().nullable() });
+  return z.strictObject({ items: z.array(item), nextCursor: z.string().nullable() });
+}
+
+export interface UploadWithProgressOptions<Schema extends z.ZodType> {
+  url: string;
+  method?: 'PUT' | 'POST';
+  body: Blob | ArrayBuffer | FormData;
+  headers?: Record<string, string>;
+  /** 成功の応答の本文の形。 */
+  schema: Schema;
+  signal?: AbortSignal;
+  /** 要求の本文のうち、ここまでに送ったバイト数。 */
+  onProgress?: (sentBytes: number) => void;
+  onUnauthorized?: () => void;
+}
+
+/**
+ * 進み具合を知らせながら本文を送る。fetchは送信の進み具合を知らせられないので、XMLHttpRequestを使う。
+ * 応答はrequestJsonと同じくスキーマで確かめ、失敗の応答と通信の失敗はApiErrorにする。止めたときは
+ * 止めた理由（無ければAbortError）を投げる。
+ */
+export function uploadWithProgress<Schema extends z.ZodType>({
+  url,
+  method = 'PUT',
+  body,
+  headers = {},
+  schema,
+  signal,
+  onProgress,
+  onUnauthorized,
+}: UploadWithProgressOptions<Schema>): Promise<z.infer<Schema>> {
+  const abortReason = () => signal?.reason ?? new DOMException('Upload aborted', 'AbortError');
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(abortReason());
+      return;
+    }
+    const xhr = new XMLHttpRequest();
+    const abort = () => xhr.abort();
+    signal?.addEventListener('abort', abort, { once: true });
+    const settle = (finish: () => void) => {
+      signal?.removeEventListener('abort', abort);
+      finish();
+    };
+    xhr.open(method, url);
+    xhr.withCredentials = true;
+    for (const [name, value] of Object.entries(headers)) xhr.setRequestHeader(name, value);
+    if (onProgress) xhr.upload.onprogress = (event) => onProgress(event.loaded);
+    xhr.onabort = () => settle(() => reject(abortReason()));
+    xhr.onerror = () =>
+      settle(() => reject(new ApiError({ status: 0, code: NETWORK_ERROR_CODE, message: 'Upload request failed' })));
+    xhr.onload = () =>
+      settle(() => {
+        if (xhr.status === HTTP_UNAUTHORIZED) onUnauthorized?.();
+        const payload = parseJsonOrUndefined(xhr.responseText);
+        if (xhr.status < 200 || xhr.status >= 300) {
+          reject(apiErrorFromResponse(xhr.status, xhr.statusText, payload));
+          return;
+        }
+        const parsed = schema.safeParse(xhr.status === HTTP_NO_CONTENT ? undefined : payload);
+        if (parsed.success) resolve(parsed.data);
+        else
+          reject(
+            new ApiError({
+              status: xhr.status,
+              code: INVALID_RESPONSE_CODE,
+              message: `Unexpected response from ${new URL(url, 'http://localhost').pathname}: ${z.prettifyError(parsed.error)}`,
+            }),
+          );
+      });
+    xhr.send(body);
+  });
+}
+
+function parseJsonOrUndefined(text: string): unknown {
+  if (!text) return undefined;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return undefined;
+  }
 }

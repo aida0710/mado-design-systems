@@ -1,5 +1,11 @@
 # 変更履歴
 
+## 0.7.2
+
+- `@mado/design-system/http`に、進み具合を知らせながら本文を送る`uploadWithProgress`を足しました。fetchは送信の進み具合を知らせられないのでXMLHttpRequestで送り、応答は`requestJson`と同じくスキーマで確かめ、失敗は`ApiError`にします。
+- `jsonRequestInit`が3つ目の引数で`signal`を受け取るようにしました。
+- `cursorPageSchema`を、契約に無い項目を通さない形（strict）にしました。両アプリの契約のページの形と同じです。
+
 ## 0.7.1
 
 - 行の高さをブラウザの既定（`line-height: normal`）として`base.css`で決めました。これまでmado S3 Data CatalogはTailwindの1.5、mado ML Trackingは既定で、両アプリで違っていました。

@@ -22,10 +22,10 @@ mado S3 Data Catalogとmado ML Trackingが共有するデザインシステム�
 GitHub Releaseに添付したtarballに依存します。npmのregistryには出していません。
 
 ```sh
-npm install https://github.com/aida0710/mado-design-systems/releases/download/v0.7.1/mado-design-system-0.7.1.tgz
+npm install https://github.com/aida0710/mado-design-systems/releases/download/v0.7.2/mado-design-system-0.7.2.tgz
 ```
 
-`package.json`には`"@mado/design-system": "https://github.com/…/mado-design-system-0.7.1.tgz"`として入り、`package-lock.json`にtarballのハッシュ（`integrity`）が残ります。リポジトリは公開なので、CIやDockerのビルドでも認証は要りません。
+`package.json`には`"@mado/design-system": "https://github.com/…/mado-design-system-0.7.2.tgz"`として入り、`package-lock.json`にtarballのハッシュ（`integrity`）が残ります。リポジトリは公開なので、CIやDockerのビルドでも認証は要りません。
 
 テキストの色付け（`@mado/design-system/code`）を使うアプリは、`highlight.js`（11.11以上）も自分の依存に入れます。highlight.jsは省略できるpeer dependencyで、CSSだけを使うアプリには要りません。
 
@@ -87,7 +87,7 @@ const html = highlightCode(text, language);
 | `@mado/design-system/format` | バイト数（`formatBytes`、1024で割ってKiB・MiB）、経過時間（`formatRelativeTime`）、名前の頭文字（`initialsOf`）。表示言語のIntlの言語（`ja-JP`など）を渡します |
 | `@mado/design-system/datetime-input` | `<input type="datetime-local">`の値と日時の変換（`formatLocalDateTimeInput`・`parseLocalDateTimeInput`）。あり得ない日時を弾きます |
 | `@mado/design-system/token-expiry` | アクセストークンの期限の選び方（7・30・90・365日、無期限、分・時間・日での入力、カレンダー。既定は90日） |
-| `@mado/design-system/http` | APIの呼び出し（`requestJson(url, { schema, init, onUnauthorized })`）。応答の本文をzodのスキーマで確かめ、失敗はAPIの本文をそのまま持つ`ApiError`（`status`・`code`・`message`＝APIの文・`details`）にする。画面は`message`をそのまま出し、訳す層は持たない。JSONとして読まない呼び出し（Blob・流したまま読む・HEAD）は`fetchResponse`で、失敗だけ`ApiError`にする。`jsonRequestInit`・`cursorPageSchema`・`isNotFoundError`・`isUnauthorizedError`も。zod（4.4以上）を自分の依存に入れる |
+| `@mado/design-system/http` | APIの呼び出し（`requestJson(url, { schema, init, onUnauthorized })`）。応答の本文をzodのスキーマで確かめ、失敗はAPIの本文をそのまま持つ`ApiError`（`status`・`code`・`message`＝APIの文・`details`）にする。画面は`message`をそのまま出し、訳す層は持たない。JSONとして読まない呼び出し（Blob・流したまま読む・HEAD）は`fetchResponse`で、失敗だけ`ApiError`にする。進み具合を見せるアップロードは`uploadWithProgress`（XMLHttpRequestで送り、応答はスキーマで確かめる）。`jsonRequestInit(method, body, { signal })`は止めるためのsignalを受け取る。`cursorPageSchema`は契約に無い項目を通さない。`jsonRequestInit`・`cursorPageSchema`・`isNotFoundError`・`isUnauthorizedError`も。zod（4.4以上）を自分の依存に入れる |
 | `@mado/design-system/list-navigation` | メニューや候補の一覧での矢印キー・Home・Endの移動先（`moveActiveIndex`） |
 | `@mado/design-system/clipboard` | `copyText`。HTTPのLANでも、モーダルのダイアログの中でもコピーでき、失敗すると`false`を返します |
 | `@mado/design-system/monaco` | `tokens.css`の色でMonacoのテーマを定義する`defineMonacoTheme(monaco.editor, theme)`と`monacoFontFamily` |
