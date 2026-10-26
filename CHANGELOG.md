@@ -1,5 +1,12 @@
 # 変更履歴
 
+## 0.7.1
+
+- 行の高さをブラウザの既定（`line-height: normal`）として`base.css`で決めました。これまでmado S3 Data CatalogはTailwindの1.5、mado ML Trackingは既定で、両アプリで違っていました。
+- `<p>`に付けた`.state-message`に、既定の上下の余白が付かないようにしました。
+- `@mado/design-system/http`に、JSONとして読まない呼び出し用の`fetchResponse`と、`isUnauthorizedError`を足しました。`abort(理由)`で止めた呼び出しを通信の失敗として扱っていたのを直しました。
+- mado S3 Data CatalogがTailwindを外したので、READMEとCSSのコメントのTailwindの記述を消しました。
+
 ## 0.7.0
 
 - APIの呼び出しの`@mado/design-system/http`を足しました。応答の本文をzodのスキーマで確かめ、失敗はAPIの本文（`{ error, code, ...値 }`）をそのまま持つ`ApiError`にします。画面は`ApiError`の`message`（APIの文）をそのまま出します。両アプリがそれぞれ持っていた取得とエラーの扱いを、これにまとめます。zodは省略できるpeer dependencyで、使うアプリが入れます。

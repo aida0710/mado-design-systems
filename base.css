@@ -1,8 +1,7 @@
 /*
  * mado S3 Data Catalogとmado ML Trackingが共有する要素の既定の見た目。ボックスモデル、フォームの
  * 部品、リンク、フォーカス、見出しとコード、文字用の小さな補助クラス。tokens.cssが必要。
- * 文字の大きさはルートでなくbodyに指定する。remで書くユーティリティ（mado S3 Data Catalogの
- * Tailwind）が、ブラウザのルートの16pxのまま使えるように。
+ * 文字の大きさはルートでなくbodyに指定する（ルートはブラウザの16pxのまま）。
  */
 * {
   box-sizing: border-box;
@@ -12,6 +11,8 @@ body {
   min-width: 320px;
   font-family: var(--font);
   font-size: var(--font-size-base);
+  /* 行の高さはブラウザの既定。表や一覧を詰めて、一度に多く見せる（両アプリで同じにする）。 */
+  line-height: normal;
   color: var(--text);
   background: var(--background);
 }
