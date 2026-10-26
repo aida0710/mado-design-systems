@@ -22,10 +22,10 @@ mado S3 Data Catalogとmado ML Trackingが共有するデザインシステム�
 GitHub Releaseに添付したtarballに依存します。npmのregistryには出していません。
 
 ```sh
-npm install https://github.com/aida0710/mado-design-systems/releases/download/v0.7.0/mado-design-system-0.7.0.tgz
+npm install https://github.com/aida0710/mado-design-systems/releases/download/v0.7.1/mado-design-system-0.7.1.tgz
 ```
 
-`package.json`には`"@mado/design-system": "https://github.com/…/mado-design-system-0.7.0.tgz"`として入り、`package-lock.json`にtarballのハッシュ（`integrity`）が残ります。リポジトリは公開なので、CIやDockerのビルドでも認証は要りません。
+`package.json`には`"@mado/design-system": "https://github.com/…/mado-design-system-0.7.1.tgz"`として入り、`package-lock.json`にtarballのハッシュ（`integrity`）が残ります。リポジトリは公開なので、CIやDockerのビルドでも認証は要りません。
 
 テキストの色付け（`@mado/design-system/code`）を使うアプリは、`highlight.js`（11.11以上）も自分の依存に入れます。highlight.jsは省略できるpeer dependencyで、CSSだけを使うアプリには要りません。
 
@@ -47,7 +47,7 @@ import '@mado/design-system/code.css';
 
 - mado ML Tracking: `apps/web`が依存し、`main.tsx`で上の順に読み込みます。
 - ドキュメントサイト（両製品の`pages/`）は`fonts.css`・`tokens.css`・`docs.css`を読み込みます。
-- mado S3 Data Catalog: `front/`が依存します。`base.css`・`components.css`・`shell.css`・`code.css`は、どれも`@layer components`に入れて読み込みます（`@import "@mado/design-system/base.css" layer(components);`）。Tailwind v4のpreflight（`@layer base`）より強く、ユーティリティclassより弱くなり、共通のCSSどうしの優先順位はlayerを使わないmado ML Trackingと同じになります（要素の指定より`.numeric`などのclassが勝つ）。
+- mado S3 Data Catalog: `front/`が依存し、mado ML Trackingと同じく上の順に読み込みます（layerは使いません）。
 
 ### 画面の枠のclassと属性
 
@@ -87,7 +87,7 @@ const html = highlightCode(text, language);
 | `@mado/design-system/format` | バイト数（`formatBytes`、1024で割ってKiB・MiB）、経過時間（`formatRelativeTime`）、名前の頭文字（`initialsOf`）。表示言語のIntlの言語（`ja-JP`など）を渡します |
 | `@mado/design-system/datetime-input` | `<input type="datetime-local">`の値と日時の変換（`formatLocalDateTimeInput`・`parseLocalDateTimeInput`）。あり得ない日時を弾きます |
 | `@mado/design-system/token-expiry` | アクセストークンの期限の選び方（7・30・90・365日、無期限、分・時間・日での入力、カレンダー。既定は90日） |
-| `@mado/design-system/http` | APIの呼び出し（`requestJson(url, { schema, init, onUnauthorized })`）。応答の本文をzodのスキーマで確かめ、失敗はAPIの本文をそのまま持つ`ApiError`（`status`・`code`・`message`＝APIの文・`details`）にする。画面は`message`をそのまま出し、訳す層は持たない。`jsonRequestInit`・`cursorPageSchema`・`isNotFoundError`も。zod（4.4以上）を自分の依存に入れる |
+| `@mado/design-system/http` | APIの呼び出し（`requestJson(url, { schema, init, onUnauthorized })`）。応答の本文をzodのスキーマで確かめ、失敗はAPIの本文をそのまま持つ`ApiError`（`status`・`code`・`message`＝APIの文・`details`）にする。画面は`message`をそのまま出し、訳す層は持たない。JSONとして読まない呼び出し（Blob・流したまま読む・HEAD）は`fetchResponse`で、失敗だけ`ApiError`にする。`jsonRequestInit`・`cursorPageSchema`・`isNotFoundError`・`isUnauthorizedError`も。zod（4.4以上）を自分の依存に入れる |
 | `@mado/design-system/list-navigation` | メニューや候補の一覧での矢印キー・Home・Endの移動先（`moveActiveIndex`） |
 | `@mado/design-system/clipboard` | `copyText`。HTTPのLANでも、モーダルのダイアログの中でもコピーでき、失敗すると`false`を返します |
 | `@mado/design-system/monaco` | `tokens.css`の色でMonacoのテーマを定義する`defineMonacoTheme(monaco.editor, theme)`と`monacoFontFamily` |
@@ -107,11 +107,11 @@ Reactの部品を使うアプリは、`react`・`react-dom`（19.2以上）と`l
 - 名前は見た目でなく役割で付けます（`--teal`ではなく`--accent`）。
 - 色は`tokens.css`の変数にだけ値で書き、ほかのファイルは変数を使います。片方のアプリだけが使う色は、そのアプリが自分の変数の定義の場所（`:root`と`:root[data-theme='dark']`）に値で書きます。文字色は、置かれる面（`--background`〜`--selected`、tintの地）のすべてで4.5:1以上にします（WCAG AA）。フォーカスの印や入力欄の枠は3:1以上にします。
 - ライトだけで足した色は、ダークでも見えるかを確かめ、必要なら`:root[data-theme='dark']`にも書きます。
+- 行の高さはブラウザの既定（`line-height: normal`、`base.css`のbody）です。
 - 文字の大きさは`--font-size-2xs`（10px）〜`--font-size-xl`（18px）の7段です。ロゴや大きな見出しのように1か所でしか使わない大きさだけ、値で書きます。
 - 角丸は`--radius-none`（入力・ボタン・表）、`--radius-sm`（小さな部品・パネル）、`--radius-pill`（バッジ）の3段です。円は`50%`を使います。
 - メディアクエリは640px・900px・1200pxの3つだけを、範囲の書き方（`@media (width < 900px)`）で書きます。
 - 部品のclassを足すときは、片方のアプリだけで使うものは各アプリに置き、両方で使うものだけをここに置きます。
-- mado S3 Data CatalogはTailwind v4を使います。Tailwindの既定テーマと同じ名前の変数（今は`--radius-sm`）は、layerの外に書く`tokens.css`の値が優先されます。新しい名前はTailwindの既定テーマ（`--color-*`、`--text-*`、`--shadow-sm`など）と重ならないものにします。
 
 `npm test`が、上の決まり（色の値、未定義の変数、ダークだけの変数、メディアクエリ）、文字色のコントラスト、形式の推測と色付けを確かめます。各アプリのテストも、アプリのCSSがこのパッケージの変数を使っているかを確かめます。
 

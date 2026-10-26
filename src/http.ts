@@ -59,27 +59,30 @@ export function isNotFoundError(failure: unknown): boolean {
   return isApiError(failure) && failure.status === HTTP_NOT_FOUND;
 }
 
-export interface RequestJsonOptions<Schema extends z.ZodType> {
-  /** 成功の応答の本文の形。204（本文なし）を返すAPIは`z.undefined()`を渡す。 */
-  schema: Schema;
+/** 401（ログインしていない・セッションが切れた）。 */
+export function isUnauthorizedError(failure: unknown): boolean {
+  return isApiError(failure) && failure.status === HTTP_UNAUTHORIZED;
+}
+
+export interface SendOptions {
   init?: RequestInit;
   /** 401のときに呼ぶ（ログイン画面へ戻すなど）。呼んだ後もApiErrorを投げる。 */
   onUnauthorized?: () => void;
 }
 
-/**
- * APIを呼び、本文を`schema`で確かめて返す。失敗の応答・通信の失敗・形の合わない本文はApiErrorにする。
- * 呼び出しを止めた（AbortSignal）ときは、ブラウザのAbortErrorをそのまま投げる。
- */
-export async function requestJson<Schema extends z.ZodType>(
-  input: string,
-  { schema, init, onUnauthorized }: RequestJsonOptions<Schema>,
-): Promise<z.infer<Schema>> {
+export interface RequestJsonOptions<Schema extends z.ZodType> extends SendOptions {
+  /** 成功の応答の本文の形。204（本文なし）を返すAPIは`z.undefined()`を渡す。 */
+  schema: Schema;
+}
+
+/** fetchし、通信の失敗をApiErrorにする。呼び出しを止めたとき（AbortSignal）は、止めた理由をそのまま投げる。 */
+async function send(input: string, { init, onUnauthorized }: SendOptions): Promise<Response> {
   let response: Response;
   try {
     response = await fetch(input, { credentials: 'include', ...init });
   } catch (error) {
-    if (error instanceof DOMException && error.name === 'AbortError') throw error;
+    // abort(reason)で止めると、AbortErrorでなく渡した理由で失敗するので、signalの状態で見分ける。
+    if (init?.signal?.aborted || (error instanceof DOMException && error.name === 'AbortError')) throw error;
     throw new ApiError({
       status: 0,
       code: NETWORK_ERROR_CODE,
@@ -87,8 +90,29 @@ export async function requestJson<Schema extends z.ZodType>(
     });
   }
   if (response.status === HTTP_UNAUTHORIZED) onUnauthorized?.();
+  return response;
+}
+
+/**
+ * APIを呼び、成功ならResponseをそのまま返す。本文を流したまま読む・Blobにする・HEADで見るなど、
+ * JSONとして読まない呼び出し用。失敗の応答と通信の失敗はApiErrorにする。
+ */
+export async function fetchResponse(input: string, options: SendOptions = {}): Promise<Response> {
+  const response = await send(input, options);
+  if (response.ok) return response;
+  const payload: unknown = await response.json().catch(() => undefined);
+  throw apiErrorFromResponse(response.status, response.statusText, payload);
+}
+
+/**
+ * APIを呼び、本文を`schema`で確かめて返す。失敗の応答・通信の失敗・形の合わない本文はApiErrorにする。
+ */
+export async function requestJson<Schema extends z.ZodType>(
+  input: string,
+  { schema, ...options }: RequestJsonOptions<Schema>,
+): Promise<z.infer<Schema>> {
+  const response = await fetchResponse(input, options);
   const payload: unknown = response.status === HTTP_NO_CONTENT ? undefined : await response.json().catch(() => undefined);
-  if (!response.ok) throw apiErrorFromResponse(response.status, response.statusText, payload);
   const parsed = schema.safeParse(payload);
   if (!parsed.success) {
     throw new ApiError({

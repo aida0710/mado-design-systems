@@ -73,6 +73,8 @@
 /* ── フィードバック ──────────────────────────────────────────────────── */
 .state-message {
   min-height: 110px;
+  /* <p>に付けても、既定の上下の余白を足さない。 */
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -303,7 +305,7 @@
 
 /* ── ダイアログ ──────────────────────────────────────────────────────── */
 .dialog {
-  /* ブラウザ既定の中央寄せに頼らない（Tailwindのpreflightなどが既定のmarginを消すため）。 */
+  /* ブラウザ既定の中央寄せに頼らない（既定のmarginを消すリセットを使うアプリでも中央に出す）。 */
   margin: auto;
   border: 1px solid var(--border);
   padding: 0;

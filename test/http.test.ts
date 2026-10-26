@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
-import { ApiError, INVALID_RESPONSE_CODE, NETWORK_ERROR_CODE, isNotFoundError, requestJson } from '../src/http';
+import { ApiError, INVALID_RESPONSE_CODE, NETWORK_ERROR_CODE, fetchResponse, isNotFoundError, isUnauthorizedError, requestJson } from '../src/http';
 
 const respond = (status: number, body?: unknown, statusText = '') =>
   vi.stubGlobal(
@@ -55,5 +55,29 @@ describe('requestJson', () => {
     expect(failure).toMatchObject({ status: 401, code: 'authentication_required' });
     respond(404, { error: 'not found', code: 'not_found' });
     expect(isNotFoundError(await requestJson('/api/x', { schema: z.unknown() }).catch((error: unknown) => error))).toBe(true);
+  });
+});
+
+describe('fetchResponse', () => {
+  it('成功ならResponseをそのまま返し、失敗はApiErrorにする', async () => {
+    respond(200, 'raw text');
+    expect(await (await fetchResponse('/api/raw')).text()).toBe('raw text');
+    respond(403, { error: 'forbidden', code: 'permission_denied' });
+    await expect(fetchResponse('/api/raw')).rejects.toMatchObject({ status: 403, code: 'permission_denied' });
+    vi.stubGlobal('fetch', vi.fn(async () => { throw new TypeError('Failed to fetch'); }));
+    await expect(fetchResponse('/api/raw')).rejects.toMatchObject({ code: NETWORK_ERROR_CODE });
+  });
+
+  it('abort(reason)で止めたときは、通信の失敗でなく止めた理由のまま投げる', async () => {
+    const controller = new AbortController();
+    const reason = new Error('page changed');
+    controller.abort(reason);
+    vi.stubGlobal('fetch', vi.fn(async () => { throw reason; }));
+    await expect(fetchResponse('/api/raw', { init: { signal: controller.signal } })).rejects.toBe(reason);
+  });
+
+  it('401はisUnauthorizedErrorで見分けられる', async () => {
+    respond(401, { error: 'authentication required', code: 'authentication_required' });
+    expect(isUnauthorizedError(await fetchResponse('/api/raw').catch((error: unknown) => error))).toBe(true);
   });
 });
